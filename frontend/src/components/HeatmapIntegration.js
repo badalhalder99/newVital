@@ -100,15 +100,15 @@ const HeatmapIntegration = () => {
     try {
       // Get database count
       const dbCount = await heatmapService.getDatabaseDataCount();
-      
+
       // Get localStorage count
       const localCount = heatmapService.getLocalDataCount();
-      
+
       setDataCount({
         database: dbCount.count,
         localStorage: localCount
       });
-      
+
       console.log(`📊 Data counts - Database: ${dbCount.count}, LocalStorage: ${localCount}`);
     } catch (error) {
       console.warn('Failed to load data counts:', error);
@@ -137,7 +137,7 @@ const HeatmapIntegration = () => {
         console.log('✅ Heatmap data found:', data.data.length, 'points');
         setHeatmapData(data);
         // Display heatmap immediately like HTML demo
-        showGreenDots(data);
+        showInstantHeatmap(data);
         setError(null);
       } else {
         console.log('❌ No heatmap data found for page:', selectedScreenshot.url);
@@ -165,6 +165,13 @@ const HeatmapIntegration = () => {
     // Clear all visual highlights
     clearAllHighlights();
 
+    // Reset vertical scrolling to hidden (default state)
+    const screenshotViewport = document.getElementById('screenshot-viewport');
+    if (screenshotViewport) {
+      screenshotViewport.style.overflowY = 'hidden';
+      screenshotViewport.scrollTop = 0;
+    }
+
     if (heatmapInstanceRef.current) {
       heatmapInstanceRef.current.setData({ data: [], max: 0 });
     }
@@ -181,6 +188,7 @@ const HeatmapIntegration = () => {
     clearAllHighlights();
     console.log('🛑 Animation stopped by user');
   };
+
 
   const createInteractionHighlight = (point, eventType, index) => {
     if (!heatmapContainerRef.current) return;
@@ -329,15 +337,15 @@ const HeatmapIntegration = () => {
   const clearAllHighlights = () => {
     if (!heatmapContainerRef.current) return;
 
-    // Remove all highlight elements
+    // Remove all animated highlight elements (instant heatmap uses only heatmapjs overlay)
     const highlights = heatmapContainerRef.current.querySelectorAll('[class*="interaction-highlight"]');
     const backgroundHighlights = heatmapContainerRef.current.querySelectorAll('[class*="interaction-bg-highlight"]');
     const tooltips = heatmapContainerRef.current.querySelectorAll('.interaction-tooltip');
-    
+
     highlights.forEach(highlight => highlight.remove());
     backgroundHighlights.forEach(bg => bg.remove());
     tooltips.forEach(tooltip => tooltip.remove());
-    
+
     console.log('🧹 Cleared all interaction highlights');
   };
 
@@ -347,18 +355,18 @@ const HeatmapIntegration = () => {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
-      
+
       // Different frequencies for different interaction types
       oscillator.frequency.value = eventType === 'click' ? 800 : 400; // Higher pitch for clicks
       oscillator.type = 'sine';
-      
+
       // Quick beep sound
       gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-      
+
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
-      
+
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.1);
     } catch (error) {
@@ -366,12 +374,124 @@ const HeatmapIntegration = () => {
     }
   };
 
-  const showGreenDots = (data) => {
+  const showInstantHeatmap = (data) => {
+    if (!heatmapContainerRef.current || !selectedScreenshot || !data.data) {
+      return;
+    }
+
+    console.log('🎯 Creating instant heatmap with', data.data.length, 'interaction points');
+
+    // Disable vertical scrolling for instant heatmap
+    const screenshotViewport = document.getElementById('screenshot-viewport');
+    if (screenshotViewport) {
+      screenshotViewport.style.overflowY = 'hidden';
+      screenshotViewport.scrollTop = 0; // Reset to top
+    }
+
+    // Get image dimensions for scaling
+    const img = document.getElementById('screenshot-image');
+    if (!img) {
+      console.log('❌ Screenshot image not found for heatmap overlay');
+      return;
+    }
+
+    // Calculate scaling based on actual image display size vs original screenshot size
+    const originalHeight = selectedScreenshot.fullPageHeight || selectedScreenshot.viewportHeight;
+    const scaleX = img.offsetWidth / selectedScreenshot.viewportWidth;
+    const scaleY = img.offsetHeight / originalHeight;
+
+    console.log('📏 Scale factors:', { scaleX, scaleY, imageWidth: img.offsetWidth, imageHeight: img.offsetHeight, originalHeight });
+
+    // Clear and setup container with !important positioning
+    heatmapContainerRef.current.innerHTML = '';
+    heatmapContainerRef.current.style.cssText = `
+      width: ${img.offsetWidth}px !important;
+      height: ${img.offsetHeight}px !important;
+      position: absolute !important;
+      top: 0px !important;
+      left: 0px !important;
+      pointer-events: none !important;
+      z-index: 10 !important;
+    `;
+
+    try {
+      // Destroy previous instance if exists
+      if (heatmapInstanceRef.current) {
+        heatmapInstanceRef.current = null;
+      }
+
+      // Create new heatmap instance
+      heatmapInstanceRef.current = h337.create({
+        container: heatmapContainerRef.current,
+        radius: 30,
+        maxOpacity: 0.8,
+        minOpacity: 0.1,
+        blur: 0.75,
+        gradient: {
+          '0.4': 'blue',
+          '0.6': 'cyan',
+          '0.7': 'lime',
+          '0.8': 'yellow',
+          '1.0': 'red'
+        }
+      });
+
+      console.log('✅ Heatmap instance created');
+
+      // Transform all data points at once
+      const transformedData = {
+        max: 5,
+        data: data.data.map(point => ({
+          x: Math.round(point.x * scaleX),
+          y: Math.round(point.y * scaleY),
+          value: point.value
+        }))
+      };
+
+      console.log('🔥 Setting instant heatmap data:', transformedData);
+
+      // Display all interactions immediately as original heatmap overlay
+      heatmapInstanceRef.current.setData(transformedData);
+
+      // Force immediate render and absolute positioning like animated version
+      setTimeout(() => {
+        const canvas = heatmapContainerRef.current.querySelector('canvas');
+        if (canvas) {
+          console.log('✅ Heatmap canvas found and visible');
+          canvas.style.display = 'block';
+          canvas.style.opacity = '1';
+          canvas.style.position = 'absolute';
+          canvas.style.top = '0px';
+          canvas.style.left = '0px';
+
+          // Also ensure container stays absolute
+          heatmapContainerRef.current.style.position = 'absolute';
+          heatmapContainerRef.current.style.top = '0px';
+          heatmapContainerRef.current.style.left = '0px';
+        } else {
+          console.log('❌ No heatmap canvas created');
+        }
+      }, 10);
+
+      console.log(`✅ Instant heatmap created with ${transformedData.data.length} points using heatmapjs overlay`);
+
+    } catch (error) {
+      console.error('❌ Failed to create instant heatmap:', error);
+    }
+  };
+
+  const showAnimatedHeatmap = (data) => {
     if (!heatmapContainerRef.current || !selectedScreenshot || !data.data) {
       return;
     }
 
     console.log('🎯 Creating animated heatmap with', data.data.length, 'interaction points');
+
+    // Enable vertical scrolling for animated heatmap
+    const screenshotViewport = document.getElementById('screenshot-viewport');
+    if (screenshotViewport) {
+      screenshotViewport.style.overflowY = 'auto';
+    }
 
     // Get image dimensions for scaling
     const img = document.getElementById('screenshot-image');
@@ -387,15 +507,17 @@ const HeatmapIntegration = () => {
 
     console.log('📏 Scale factors:', { scaleX, scaleY, imageWidth: img.offsetWidth, imageHeight: img.offsetHeight, originalHeight });
 
-    // Clear and setup container - force absolute positioning
+    // Clear and setup container with !important positioning
     heatmapContainerRef.current.innerHTML = '';
-    heatmapContainerRef.current.style.width = `${img.offsetWidth}px`;
-    heatmapContainerRef.current.style.height = `${img.offsetHeight}px`;
-    heatmapContainerRef.current.style.position = 'absolute !important';
-    heatmapContainerRef.current.style.top = '0px';
-    heatmapContainerRef.current.style.left = '0px';
-    heatmapContainerRef.current.style.pointerEvents = 'none';
-    heatmapContainerRef.current.style.zIndex = '10';
+    heatmapContainerRef.current.style.cssText = `
+      width: ${img.offsetWidth}px !important;
+      height: ${img.offsetHeight}px !important;
+      position: absolute !important;
+      top: 0px !important;
+      left: 0px !important;
+      pointer-events: none !important;
+      z-index: 10 !important;
+    `;
 
     // Create heatmap instance - same config as HTML demo
     try {
@@ -451,7 +573,7 @@ const HeatmapIntegration = () => {
 
       // Speed up the animation if it's too long (max 30 seconds for playback)
       const maxAnimationDuration = 30000; // 30 seconds max
-      const baseSpeedMultiplier = totalOriginalDuration > maxAnimationDuration ? 
+      const baseSpeedMultiplier = totalOriginalDuration > maxAnimationDuration ?
         maxAnimationDuration / totalOriginalDuration : 1;
       const speedMultiplier = baseSpeedMultiplier * animationSpeed;
 
@@ -472,11 +594,11 @@ const HeatmapIntegration = () => {
 
       // Animate interactions sequentially
       const animatedPoints = [];
-      
+
       sortedInteractions.forEach((point, index) => {
         const interactionTime = new Date(point.timestamp);
         const relativeTime = (interactionTime - firstInteraction) / speedMultiplier;
-        
+
         const timeoutId = setTimeout(() => {
           // Add this interaction to the accumulated points
           const scaledPoint = {
@@ -508,7 +630,7 @@ const HeatmapIntegration = () => {
           setAnimationProgress(progress);
 
           console.log(`🎯 Animation step ${index + 1}/${sortedInteractions.length}: Added ${point.event_type} at (${point.x}, ${point.y})`);
-          
+
           // Check if animation is complete
           if (index === sortedInteractions.length - 1) {
             setIsAnimating(false);
@@ -517,7 +639,7 @@ const HeatmapIntegration = () => {
             setTimeout(() => clearAllHighlights(), 2000);
           }
         }, relativeTime);
-        
+
         animationTimeoutsRef.current.push(timeoutId);
       });
 
@@ -609,37 +731,37 @@ This action cannot be undone!`;
     if (window.confirm(confirmMessage)) {
       setLoading(true);
       setError(null);
-      
+
       try {
         console.log('🔄 Starting complete data reset...');
-        
+
         // Get current data counts
         const dbCount = await heatmapService.getDatabaseDataCount();
         const localCount = heatmapService.getLocalDataCount();
-        
+
         console.log(`📊 Current data - Database: ${dbCount.count} records, LocalStorage: ${localCount} entries`);
-        
+
         // Clear all heatmap data (database + localStorage + guest data)
         const resetResult = await heatmapService.resetAllHeatmapData();
-        
+
         // Clear screenshots
         screenshotService.clearAllScreenshots();
-        
+
         // Reset component state
         setScreenshots([]);
         setSelectedScreenshot(null);
         setHeatmapData(null);
         setVisitorData([]);
         clearHeatmapOverlay();
-        
+
         // Refresh data counts to show 0
         await loadDataCount();
-        
+
         // Show success message
         alert(`✅ Complete reset successful!\n\n${resetResult.message}\n\nAll heatmap data has been reset to 0.`);
-        
+
         console.log('✅ Complete data reset finished:', resetResult);
-        
+
       } catch (error) {
         console.error('❌ Data reset failed:', error);
         setError(`Failed to reset data: ${error.message}`);
@@ -672,9 +794,9 @@ This action cannot be undone!`;
         marginBottom: '20px'
       }}>
         <h4 style={{fontWeight: 500}}>Controls Heatmap From Here:</h4>
-        
+
         {/* Data Count Display */}
-        <div style={{
+        {/* <div style={{
           backgroundColor: '#fff',
           border: '1px solid #dee2e6',
           borderRadius: '6px',
@@ -706,8 +828,10 @@ This action cannot be undone!`;
           >
             🔄 Refresh Count
           </button>
-        </div>
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center',marginTop: '10px' }}>
+        </div> */}
+
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center', marginTop: '10px' }}>
+
           <button
             onClick={loadHeatmapForScreenshot}
             disabled={loading || !selectedScreenshot}
@@ -761,7 +885,7 @@ This action cannot be undone!`;
             🔄 Reset Guest Data
           </button>
 
-          <button
+          {/* <button
             onClick={loadVisitorData}
             style={{
               padding: '10px 20px',
@@ -774,12 +898,12 @@ This action cannot be undone!`;
             }}
           >
             🔄 Refresh Visitors
-          </button>
+          </button> */}
 
           <button
             onClick={async () => {
               if (selectedScreenshot) {
-                console.log('🔥 Loading heatmap data from database for', selectedScreenshot.url);
+                console.log('🔥 Loading heatmap data for instant display from database for', selectedScreenshot.url);
                 setLoading(true);
 
                 try {
@@ -787,18 +911,69 @@ This action cannot be undone!`;
                   const heatmapData = await heatmapService.loadHeatmapData(selectedScreenshot.url);
 
                   if (heatmapData && heatmapData.data && heatmapData.data.length > 0) {
-                    showGreenDots(heatmapData);
+                    showInstantHeatmap(heatmapData);
                     setError(null);
-                    console.log(`✅ Displaying ${heatmapData.data.length} interaction points from database`);
+                    console.log(`✅ Displaying ${heatmapData.data.length} interaction points instantly from database`);
                   } else {
                     // Check localStorage as fallback
                     const localData = heatmapService.getLocalHeatmapData(selectedScreenshot.url);
                     if (localData && localData.length > 0) {
                       console.log('📦 Found localStorage data, using as fallback...');
                       const data = { data: localData };
-                      showGreenDots(data);
+                      showInstantHeatmap(data);
                       setError(null);
-                      console.log(`✅ Displaying ${localData.length} interaction points from localStorage`);
+                      console.log(`✅ Displaying ${localData.length} interaction points instantly from localStorage`);
+                    } else {
+                      const message = heatmapData?.message || `No interaction data found for ${selectedScreenshot.url}. Visit this page and interact with it first.`;
+                      setError(message);
+                      clearHeatmapOverlay();
+                    }
+                  }
+                } catch (error) {
+                  console.error('Error loading heatmap data:', error);
+                  setError('Failed to load heatmap data: ' + error.message);
+                } finally {
+                  setLoading(false);
+                }
+              }
+            }}
+            disabled={!selectedScreenshot || isAnimating}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#28a745',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '14px'
+            }}
+          >
+            🔥 Show Heatmap
+          </button>
+
+          <button
+            onClick={async () => {
+              if (selectedScreenshot) {
+                console.log('🎬 Loading heatmap data for animated display from database for', selectedScreenshot.url);
+                setLoading(true);
+
+                try {
+                  // Load heatmap data from database instead of localStorage
+                  const heatmapData = await heatmapService.loadHeatmapData(selectedScreenshot.url);
+
+                  if (heatmapData && heatmapData.data && heatmapData.data.length > 0) {
+                    showAnimatedHeatmap(heatmapData);
+                    setError(null);
+                    console.log(`✅ Displaying ${heatmapData.data.length} interaction points with animation from database`);
+                  } else {
+                    // Check localStorage as fallback
+                    const localData = heatmapService.getLocalHeatmapData(selectedScreenshot.url);
+                    if (localData && localData.length > 0) {
+                      console.log('📦 Found localStorage data, using as fallback...');
+                      const data = { data: localData };
+                      showAnimatedHeatmap(data);
+                      setError(null);
+                      console.log(`✅ Displaying ${localData.length} interaction points with animation from localStorage`);
                     } else {
                       const message = heatmapData?.message || `No interaction data found for ${selectedScreenshot.url}. Visit this page and interact with it first.`;
                       setError(message);
@@ -865,7 +1040,7 @@ This action cannot be undone!`;
               />
               <span style={{ fontSize: '14px', color: '#6c757d' }}>{animationSpeed}x</span>
             </div>
-            
+
             <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
               <input
                 type="checkbox"
@@ -906,7 +1081,7 @@ This action cannot be undone!`;
                   transition: 'width 0.3s ease'
                 }} />
               </div>
-              
+
               <div style={{
                 display: 'flex',
                 gap: '15px',
@@ -947,7 +1122,7 @@ This action cannot be undone!`;
               fontSize: '12px',
               color: '#666'
             }}>
-              💡 <strong>Tip:</strong> Screenshot displays at original user screen width. During animation, interactions appear with their original timing and auto-scroll vertically. Red circles = clicks, Green circles = mouse movement.
+              💡 <strong>Tip:</strong> Use "Show Heatmap" to see all interactions instantly, or "Show Animated Heatmap" to watch them appear with original timing. Screenshot auto-scrolls vertically during animation.
             </div>
           )}
 
@@ -1027,7 +1202,7 @@ This action cannot be undone!`;
                   position: 'relative',
                   backgroundColor: '#fff',
                   maxWidth: '100%',
-                  height: '600px',
+                  height: 'auto',
                   display: 'block'
                 }}>
                 {/* Page Screenshot */}

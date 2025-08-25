@@ -2324,7 +2324,7 @@ body {
 }
 
 .dashboard-main {
-  padding: 3rem 0;
+  padding: 0;
 }
 
 .stats-grid {
@@ -3073,6 +3073,7 @@ body {
 
 .dashboard-content {
   padding: 2rem;
+  padding-top: 0px;
   max-width: 1400px;
   margin: 0 auto;
 }
