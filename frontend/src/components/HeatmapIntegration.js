@@ -12,8 +12,13 @@ const HeatmapIntegration = () => {
   const [error, setError] = useState(null);
   const [visitorData, setVisitorData] = useState([]);
   const [dataCount, setDataCount] = useState({ database: 0, localStorage: 0 });
+  const [animationProgress, setAnimationProgress] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [animationSpeed, setAnimationSpeed] = useState(1);
+  const [soundEnabled, setSoundEnabled] = useState(false);
   const heatmapContainerRef = useRef(null);
   const heatmapInstanceRef = useRef(null);
+  const animationTimeoutsRef = useRef([]);
 
   useEffect(() => {
     loadAllScreenshots();
@@ -151,6 +156,15 @@ const HeatmapIntegration = () => {
 
 
   const clearHeatmapOverlay = () => {
+    // Clear any running animations
+    animationTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    animationTimeoutsRef.current = [];
+    setIsAnimating(false);
+    setAnimationProgress(0);
+
+    // Clear all visual highlights
+    clearAllHighlights();
+
     if (heatmapInstanceRef.current) {
       heatmapInstanceRef.current.setData({ data: [], max: 0 });
     }
@@ -160,31 +174,223 @@ const HeatmapIntegration = () => {
     }
   };
 
+  const stopAnimation = () => {
+    animationTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    animationTimeoutsRef.current = [];
+    setIsAnimating(false);
+    clearAllHighlights();
+    console.log('🛑 Animation stopped by user');
+  };
+
+  const createInteractionHighlight = (point, eventType, index) => {
+    if (!heatmapContainerRef.current) return;
+
+    // Create highlight element
+    const highlight = document.createElement('div');
+    highlight.className = `interaction-highlight-${index}`;
+    highlight.style.cssText = `
+      position: absolute;
+      left: ${point.x - 25}px;
+      top: ${point.y - 25}px;
+      width: 50px;
+      height: 50px;
+      border: 3px solid ${eventType === 'click' ? '#ff4444' : '#44ff44'};
+      border-radius: 50%;
+      background: ${eventType === 'click' ? 'rgba(255, 68, 68, 0.2)' : 'rgba(68, 255, 68, 0.2)'};
+      pointer-events: none;
+      z-index: 1000;
+      animation: highlightPulse 2s ease-out forwards;
+      box-shadow: 0 0 20px ${eventType === 'click' ? '#ff4444' : '#44ff44'};
+    `;
+
+    // Add pulse animation styles to the document if not already added
+    if (!document.getElementById('highlight-styles')) {
+      const style = document.createElement('style');
+      style.id = 'highlight-styles';
+      style.textContent = `
+        @keyframes highlightPulse {
+          0% {
+            transform: scale(0.5);
+            opacity: 1;
+          }
+          50% {
+            transform: scale(1.2);
+            opacity: 0.8;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 0.6;
+          }
+        }
+        @keyframes backgroundPulse {
+          0% {
+            transform: scale(0.3);
+            opacity: 0.8;
+          }
+          50% {
+            transform: scale(1.1);
+            opacity: 0.4;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 0.2;
+          }
+        }
+        .interaction-tooltip {
+          position: absolute;
+          background: rgba(0, 0, 0, 0.8);
+          color: white;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          white-space: nowrap;
+          pointer-events: none;
+          z-index: 1001;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // Add tooltip with interaction info
+    const tooltip = document.createElement('div');
+    tooltip.className = 'interaction-tooltip';
+    tooltip.style.cssText = `
+      position: absolute;
+      left: ${point.x + 30}px;
+      top: ${point.y - 15}px;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 1001;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    `;
+    tooltip.textContent = `${eventType === 'click' ? '🖱️ Click' : '👆 Movement'} #${index + 1}`;
+
+    // Add a larger background highlight for better visibility
+    const backgroundHighlight = document.createElement('div');
+    backgroundHighlight.className = `interaction-bg-highlight-${index}`;
+    backgroundHighlight.style.cssText = `
+      position: absolute;
+      left: ${point.x - 60}px;
+      top: ${point.y - 60}px;
+      width: 120px;
+      height: 120px;
+      background: ${eventType === 'click' ? 'rgba(255, 68, 68, 0.1)' : 'rgba(68, 255, 68, 0.1)'};
+      border: 2px dashed ${eventType === 'click' ? '#ff4444' : '#44ff44'};
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 999;
+      animation: backgroundPulse 2s ease-out forwards;
+    `;
+
+    heatmapContainerRef.current.appendChild(backgroundHighlight);
+    heatmapContainerRef.current.appendChild(highlight);
+    heatmapContainerRef.current.appendChild(tooltip);
+
+    // Auto-remove highlight after 4 seconds
+    setTimeout(() => {
+      if (backgroundHighlight.parentNode) backgroundHighlight.remove();
+      if (highlight.parentNode) highlight.remove();
+      if (tooltip.parentNode) tooltip.remove();
+    }, 4000);
+  };
+
+  const scrollToInteraction = (point) => {
+    if (!heatmapContainerRef.current) return;
+
+    // Find the screenshot viewport container
+    const screenshotViewport = document.getElementById('screenshot-viewport');
+    if (!screenshotViewport) return;
+
+    // Get viewport dimensions
+    const viewportHeight = screenshotViewport.clientHeight;
+
+    // Calculate target scroll position to center the interaction vertically
+    const targetScrollY = point.y - (viewportHeight / 2);
+
+    // Ensure scroll values are within bounds
+    const maxScrollY = screenshotViewport.scrollHeight - viewportHeight;
+    const finalScrollY = Math.max(0, Math.min(targetScrollY, maxScrollY));
+
+    // Smooth scroll the screenshot viewport vertically to center the interaction
+    screenshotViewport.scrollTo({
+      top: finalScrollY,
+      behavior: 'smooth'
+    });
+
+    console.log(`📍 Auto-scrolling screenshot viewport to interaction at (${point.x}, ${point.y}) - scroll to Y: ${finalScrollY}`);
+  };
+
+  const clearAllHighlights = () => {
+    if (!heatmapContainerRef.current) return;
+
+    // Remove all highlight elements
+    const highlights = heatmapContainerRef.current.querySelectorAll('[class*="interaction-highlight"]');
+    const backgroundHighlights = heatmapContainerRef.current.querySelectorAll('[class*="interaction-bg-highlight"]');
+    const tooltips = heatmapContainerRef.current.querySelectorAll('.interaction-tooltip');
+    
+    highlights.forEach(highlight => highlight.remove());
+    backgroundHighlights.forEach(bg => bg.remove());
+    tooltips.forEach(tooltip => tooltip.remove());
+    
+    console.log('🧹 Cleared all interaction highlights');
+  };
+
+  const playInteractionSound = (eventType) => {
+    try {
+      // Create a simple audio context for sound notifications
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      // Different frequencies for different interaction types
+      oscillator.frequency.value = eventType === 'click' ? 800 : 400; // Higher pitch for clicks
+      oscillator.type = 'sine';
+      
+      // Quick beep sound
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.1);
+    } catch (error) {
+      console.warn('Could not play interaction sound:', error);
+    }
+  };
+
   const showGreenDots = (data) => {
     if (!heatmapContainerRef.current || !selectedScreenshot || !data.data) {
       return;
     }
 
-    console.log('🎯 Creating heatmap with', data.data.length, 'interaction points');
+    console.log('🎯 Creating animated heatmap with', data.data.length, 'interaction points');
 
     // Get image dimensions for scaling
-    const img = heatmapContainerRef.current.previousElementSibling;
+    const img = document.getElementById('screenshot-image');
     if (!img) {
-      console.log('❌ Image not found for heatmap overlay');
+      console.log('❌ Screenshot image not found for heatmap overlay');
       return;
     }
 
-    const imgRect = img.getBoundingClientRect();
+    // Calculate scaling based on actual image display size vs original screenshot size
     const originalHeight = selectedScreenshot.fullPageHeight || selectedScreenshot.viewportHeight;
-    const scaleX = imgRect.width / selectedScreenshot.viewportWidth;
-    const scaleY = imgRect.height / originalHeight;
+    const scaleX = img.offsetWidth / selectedScreenshot.viewportWidth; // Scale based on displayed width
+    const scaleY = img.offsetHeight / originalHeight; // Scale based on displayed height
 
-    console.log('📏 Scale factors:', { scaleX, scaleY, imgRect, originalHeight });
+    console.log('📏 Scale factors:', { scaleX, scaleY, imageWidth: img.offsetWidth, imageHeight: img.offsetHeight, originalHeight });
 
     // Clear and setup container - force absolute positioning
     heatmapContainerRef.current.innerHTML = '';
-    heatmapContainerRef.current.style.width = `${imgRect.width}px`;
-    heatmapContainerRef.current.style.height = `${imgRect.height}px`;
+    heatmapContainerRef.current.style.width = `${img.offsetWidth}px`;
+    heatmapContainerRef.current.style.height = `${img.offsetHeight}px`;
     heatmapContainerRef.current.style.position = 'absolute !important';
     heatmapContainerRef.current.style.top = '0px';
     heatmapContainerRef.current.style.left = '0px';
@@ -216,20 +422,104 @@ const HeatmapIntegration = () => {
 
       console.log('✅ Heatmap instance created');
 
-      // Transform data to screenshot coordinates
-      const transformedData = {
-        max: 5, // Same as HTML demo
-        data: data.data.map(point => ({
-          x: Math.round(point.x * scaleX),
-          y: Math.round(point.y * scaleY),
-          value: point.value
-        }))
-      };
+      // Sort interactions by timestamp for sequential playback
+      const sortedInteractions = data.data
+        .filter(point => point.timestamp) // Only points with timestamps
+        .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-      console.log('🔥 Setting heatmap data:', transformedData);
+      if (sortedInteractions.length === 0) {
+        console.log('⚠️ No interactions with timestamps found, falling back to instant display');
+        // Fallback to instant display for backward compatibility
+        const transformedData = {
+          max: 5,
+          data: data.data.map(point => ({
+            x: Math.round(point.x * scaleX),
+            y: Math.round(point.y * scaleY),
+            value: point.value
+          }))
+        };
+        heatmapInstanceRef.current.setData(transformedData);
+        return;
+      }
 
-      // Set heatmap data immediately - like HTML demo
-      heatmapInstanceRef.current.setData(transformedData);
+      console.log('🎬 Starting sequential animation with', sortedInteractions.length, 'interactions');
+
+      // Calculate timing for animation
+      const firstInteraction = new Date(sortedInteractions[0].timestamp);
+      const lastInteraction = new Date(sortedInteractions[sortedInteractions.length - 1].timestamp);
+      const totalOriginalDuration = lastInteraction - firstInteraction;
+
+      // Speed up the animation if it's too long (max 30 seconds for playback)
+      const maxAnimationDuration = 30000; // 30 seconds max
+      const baseSpeedMultiplier = totalOriginalDuration > maxAnimationDuration ? 
+        maxAnimationDuration / totalOriginalDuration : 1;
+      const speedMultiplier = baseSpeedMultiplier * animationSpeed;
+
+      console.log('⏱️ Animation timing:', {
+        originalDuration: Math.round(totalOriginalDuration / 1000) + 's',
+        playbackDuration: Math.round(totalOriginalDuration * speedMultiplier / 1000) + 's',
+        speedMultiplier: speedMultiplier.toFixed(2) + 'x'
+      });
+
+      // Clear any existing animation timeouts
+      animationTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      animationTimeoutsRef.current = [];
+
+      // Start with empty heatmap
+      heatmapInstanceRef.current.setData({ max: 5, data: [] });
+      setIsAnimating(true);
+      setAnimationProgress(0);
+
+      // Animate interactions sequentially
+      const animatedPoints = [];
+      
+      sortedInteractions.forEach((point, index) => {
+        const interactionTime = new Date(point.timestamp);
+        const relativeTime = (interactionTime - firstInteraction) / speedMultiplier;
+        
+        const timeoutId = setTimeout(() => {
+          // Add this interaction to the accumulated points
+          const scaledPoint = {
+            x: Math.round(point.x * scaleX),
+            y: Math.round(point.y * scaleY),
+            value: point.value
+          };
+          animatedPoints.push(scaledPoint);
+
+          // Update heatmap with all points up to this moment
+          heatmapInstanceRef.current.setData({
+            max: 5,
+            data: [...animatedPoints]
+          });
+
+          // Add visual highlight for this interaction
+          createInteractionHighlight(scaledPoint, point.event_type, index);
+
+          // Auto-scroll to bring the interaction into view
+          scrollToInteraction(scaledPoint);
+
+          // Play sound notification if enabled
+          if (soundEnabled) {
+            playInteractionSound(point.event_type);
+          }
+
+          // Update progress
+          const progress = ((index + 1) / sortedInteractions.length) * 100;
+          setAnimationProgress(progress);
+
+          console.log(`🎯 Animation step ${index + 1}/${sortedInteractions.length}: Added ${point.event_type} at (${point.x}, ${point.y})`);
+          
+          // Check if animation is complete
+          if (index === sortedInteractions.length - 1) {
+            setIsAnimating(false);
+            console.log('✅ Heatmap animation completed');
+            // Clear all highlights after a delay
+            setTimeout(() => clearAllHighlights(), 2000);
+          }
+        }, relativeTime);
+        
+        animationTimeoutsRef.current.push(timeoutId);
+      });
 
       // Force immediate render and absolute positioning
       setTimeout(() => {
@@ -251,10 +541,8 @@ const HeatmapIntegration = () => {
         }
       }, 10);
 
-      console.log(`✅ Heatmap created with ${transformedData.data.length} points`);
-
     } catch (error) {
-      console.error('❌ Failed to create heatmap:', error);
+      console.error('❌ Failed to create animated heatmap:', error);
     }
   };
 
@@ -525,7 +813,7 @@ This action cannot be undone!`;
                 }
               }
             }}
-            disabled={!selectedScreenshot}
+            disabled={!selectedScreenshot || isAnimating}
             style={{
               padding: '10px 20px',
               backgroundColor: '#17a2b8',
@@ -536,8 +824,132 @@ This action cannot be undone!`;
               fontSize: '14px'
             }}
           >
-            🔥 Show Heatmap
+            🎬 Show Animated Heatmap
           </button>
+
+          {isAnimating && (
+            <button
+              onClick={stopAnimation}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#dc3545',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              🛑 Stop Animation
+            </button>
+          )}
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '15px',
+            marginTop: '10px',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <label style={{ fontSize: '14px', fontWeight: '500' }}>Animation Speed:</label>
+              <input
+                type="range"
+                min="0.5"
+                max="5"
+                step="0.5"
+                value={animationSpeed}
+                onChange={(e) => setAnimationSpeed(parseFloat(e.target.value))}
+                disabled={isAnimating}
+                style={{ width: '100px' }}
+              />
+              <span style={{ fontSize: '14px', color: '#6c757d' }}>{animationSpeed}x</span>
+            </div>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input
+                type="checkbox"
+                id="soundEnabled"
+                checked={soundEnabled}
+                onChange={(e) => setSoundEnabled(e.target.checked)}
+                disabled={isAnimating}
+              />
+              <label htmlFor="soundEnabled" style={{ fontSize: '14px', cursor: 'pointer' }}>
+                🔊 Sound Effects
+              </label>
+            </div>
+          </div>
+
+          {isAnimating && (
+            <div style={{
+              marginTop: '10px',
+              padding: '10px',
+              backgroundColor: '#e3f2fd',
+              border: '1px solid #2196f3',
+              borderRadius: '4px'
+            }}>
+              <div style={{ fontSize: '14px', marginBottom: '5px' }}>
+                🎬 Animation Progress: {Math.round(animationProgress)}%
+              </div>
+              <div style={{
+                width: '100%',
+                height: '8px',
+                backgroundColor: '#e0e0e0',
+                borderRadius: '4px',
+                overflow: 'hidden',
+                marginBottom: '10px'
+              }}>
+                <div style={{
+                  height: '100%',
+                  width: `${animationProgress}%`,
+                  backgroundColor: '#2196f3',
+                  transition: 'width 0.3s ease'
+                }} />
+              </div>
+              
+              <div style={{
+                display: 'flex',
+                gap: '15px',
+                fontSize: '12px',
+                color: '#666'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <div style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    border: '2px solid #ff4444',
+                    backgroundColor: 'rgba(255, 68, 68, 0.2)'
+                  }} />
+                  <span>🖱️ Clicks</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <div style={{
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%',
+                    border: '2px solid #44ff44',
+                    backgroundColor: 'rgba(68, 255, 68, 0.2)'
+                  }} />
+                  <span>👆 Mouse Movement</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!isAnimating && heatmapData && heatmapData.data && heatmapData.data.length > 0 && (
+            <div style={{
+              marginTop: '10px',
+              padding: '8px',
+              backgroundColor: '#f8f9fa',
+              border: '1px solid #dee2e6',
+              borderRadius: '4px',
+              fontSize: '12px',
+              color: '#666'
+            }}>
+              💡 <strong>Tip:</strong> Screenshot displays at original user screen width. During animation, interactions appear with their original timing and auto-scroll vertically. Red circles = clicks, Green circles = mouse movement.
+            </div>
+          )}
 
         </div>
 
@@ -607,23 +1019,26 @@ This action cannot be undone!`;
             </div>
 
             {selectedScreenshot && (
-              <div style={{
-                border: '2px solid #4caf50',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                position: 'relative',
-                backgroundColor: '#fff',
-                maxWidth: '100%',
-                display: 'inline-block'
-              }}>
+              <div id="screenshot-viewport" style={{
+                  border: '2px solid #4caf50',
+                  borderRadius: '8px',
+                  overflowX: 'hidden',
+                  overflowY: 'auto',
+                  position: 'relative',
+                  backgroundColor: '#fff',
+                  maxWidth: '100%',
+                  height: '600px',
+                  display: 'block'
+                }}>
                 {/* Page Screenshot */}
                 <img
+                  id="screenshot-image"
                   src={selectedScreenshot.dataUrl}
                   alt={`Screenshot of ${selectedScreenshot.url}`}
                   style={{
                     width: '100%',
                     height: 'auto',
-                    display: 'block',
+                    display: 'block'
                   }}
                   onLoad={() => {
                     // Only load heatmap data, don't track page visits

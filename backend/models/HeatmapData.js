@@ -84,7 +84,7 @@ class HeatmapData {
       if (options.endDate) query.timestamp.$lte = new Date(options.endDate);
     }
 
-    const heatmapData = await collection.find(query).toArray();
+    const heatmapData = await collection.find(query).sort({ timestamp: 1 }).toArray();
     
     if (heatmapData.length === 0) {
       return {
@@ -97,7 +97,9 @@ class HeatmapData {
     const heatmapPoints = heatmapData.map(item => ({
       x: item.position?.pageX || item.position?.x || 0,
       y: item.position?.pageY || item.position?.y || 0,
-      value: item.value || (item.event_type === 'click' ? 5 : 1)
+      value: item.value || (item.event_type === 'click' ? 5 : 1),
+      timestamp: item.timestamp,
+      event_type: item.event_type
     }));
 
     return {
