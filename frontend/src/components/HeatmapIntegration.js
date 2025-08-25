@@ -165,10 +165,11 @@ const HeatmapIntegration = () => {
     // Clear all visual highlights
     clearAllHighlights();
 
-    // Reset vertical scrolling to hidden (default state)
+    // Reset viewport to default state (hidden scrolling, auto height)
     const screenshotViewport = document.getElementById('screenshot-viewport');
     if (screenshotViewport) {
       screenshotViewport.style.overflowY = 'hidden';
+      screenshotViewport.style.height = 'auto';
       screenshotViewport.scrollTop = 0;
     }
 
@@ -381,10 +382,11 @@ const HeatmapIntegration = () => {
 
     console.log('🎯 Creating instant heatmap with', data.data.length, 'interaction points');
 
-    // Disable vertical scrolling for instant heatmap
+    // Configure viewport for instant heatmap (auto height, no scrolling)
     const screenshotViewport = document.getElementById('screenshot-viewport');
     if (screenshotViewport) {
       screenshotViewport.style.overflowY = 'hidden';
+      screenshotViewport.style.height = 'auto'; // Auto height to show full screenshot
       screenshotViewport.scrollTop = 0; // Reset to top
     }
 
@@ -487,10 +489,11 @@ const HeatmapIntegration = () => {
 
     console.log('🎯 Creating animated heatmap with', data.data.length, 'interaction points');
 
-    // Enable vertical scrolling for animated heatmap
+    // Configure viewport for animated heatmap (fixed height, scrolling enabled)
     const screenshotViewport = document.getElementById('screenshot-viewport');
     if (screenshotViewport) {
       screenshotViewport.style.overflowY = 'auto';
+      screenshotViewport.style.height = '600px'; // Fixed height for scrolling
     }
 
     // Get image dimensions for scaling
@@ -1202,7 +1205,7 @@ This action cannot be undone!`;
                   position: 'relative',
                   backgroundColor: '#fff',
                   maxWidth: '100%',
-                  height: 'auto',
+                  height: '600px',
                   display: 'block'
                 }}>
                 {/* Page Screenshot */}
