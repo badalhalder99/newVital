@@ -35,12 +35,42 @@ router.post('/register', async (req, res) => {
 
     const hashedPassword = await User.hashPassword(password);
 
-    // Generate tenant_id for tenant users (simple incremental approach)
+    // Generate tenant_id for tenant users
     let tenant_id = 1; // Default for regular users
+    let tenantRecord = null;
+    
     if (role === 'tenant') {
-      // In a production system, you'd want a more robust tenant ID generation
-      const existingTenants = await User.findAll(null, 'mongodb', { where: { role: 'tenant' } });
-      tenant_id = existingTenants.length + 2; // Start from 2 for tenants
+      // Create a proper tenant record first
+      const Tenant = require('../models/Tenant');
+      
+      // Generate subdomain from domain name (remove spaces and make lowercase)
+      const subdomain = domainName.replace(/\s+/g, '').toLowerCase();
+      
+      // Check if subdomain already exists
+      const existingTenant = await Tenant.findBySubdomain(subdomain);
+      if (existingTenant) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Domain name already taken. Please choose a different domain name.' 
+        });
+      }
+      
+      // Create new tenant
+      tenantRecord = new Tenant({
+        name: storeName,
+        subdomain: subdomain,
+        database_name: `tenant_${subdomain}`,
+        status: 'active',
+        settings: {
+          max_users: 100,
+          features: ['website', 'analytics']
+        },
+        created_at: new Date(),
+        updated_at: new Date()
+      });
+      
+      const savedTenant = await tenantRecord.save();
+      tenant_id = savedTenant.insertedId;
     }
 
     const newUser = new User({
@@ -56,10 +86,19 @@ router.post('/register', async (req, res) => {
       created_at: new Date(),
       updated_at: new Date()
     });
+    
+    // Add tenant information for tenant users
+    if (tenantRecord) {
+      newUser.tenant = {
+        name: tenantRecord.name,
+        subdomain: tenantRecord.subdomain,
+        database_name: tenantRecord.database_name
+      };
+    }
 
     // Save to main database for authentication (MongoDB only)
-    const savedUser = await newUser.save('mongodb');
-    const userId = savedUser.mongodb.insertedId;
+    const savedUser = await newUser.save(); // Use main database (no tenantId)
+    const userId = savedUser.insertedId;
     
     const token = generateToken(userId);
 

@@ -13,13 +13,14 @@ const tenantRoutes = require('./routes/tenants');
 const subscriptionRoutes = require('./routes/subscriptions');
 const analyticsRoutes = require('./routes/analytics');
 const heatmapRoutes = require('./routes/heatmap');
+const tenantWebsiteRoutes = require('./routes/tenantWebsite');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3003', 'http://localhost:3004'],
   credentials: true
 }));
 
@@ -52,6 +53,7 @@ app.use('/api/tenants', tenantRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/heatmap', heatmapRoutes);
+app.use('/api/tenant-website', tenantWebsiteRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

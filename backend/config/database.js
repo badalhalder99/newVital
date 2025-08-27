@@ -71,6 +71,14 @@ async function closeDatabaseConnections() {
   }
 }
 
+// Get tenant database
+function getTenantDb(tenantId) {
+  if (!mongoClient) {
+    throw new Error('MongoDB not initialized. Call connectToMongoDB first.');
+  }
+  return mongoClient.db(`tenant_${tenantId}`);
+}
+
 // Get collection with tenant support
 function getCollection(collectionName, tenantId = null) {
   const db = getMongoDb(tenantId);
@@ -81,6 +89,7 @@ module.exports = {
   connectToMongoDB,
   initializeDatabase,
   getMongoDb,
+  getTenantDb,
   createTenantDatabase,
   closeDatabaseConnections,
   getCollection,

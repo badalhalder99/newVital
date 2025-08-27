@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import UserManager from '../components/UserManager';
 import TenantManager from '../components/TenantManager';
+import TenantPageManagerPro from '../components/TenantPageManagerPro';
 import HeatmapIntegration from '../components/HeatmapIntegration';
 
 const DashboardPage = () => {
@@ -42,11 +43,10 @@ const DashboardPage = () => {
       ];
     } else if (user?.role === 'tenant') {
       return [
-        { id: 'overview', icon: '📊', label: 'Store Overview', active: true },
+        { id: 'overview', icon: '📊', label: 'Website Overview', active: true },
+        { id: 'pages', icon: '📄', label: 'Pages' },
         { id: 'users', icon: '👥', label: 'My Users' },
-        { id: 'products', icon: '📦', label: 'Products' },
-        { id: 'orders', icon: '🛒', label: 'Orders' },
-        { id: 'settings', icon: '⚙️', label: 'Store Settings' }
+        { id: 'settings', icon: '⚙️', label: 'Website Settings' }
       ];
     } else {
       return [
@@ -155,6 +155,20 @@ const DashboardPage = () => {
     switch (activeTab) {
       case 'overview':
         return renderOverview();
+      
+      case 'pages':
+        if (user?.role === 'tenant') {
+          return (
+            <div className="management-section">
+              <h2>📄 Website Pages</h2>
+              <p className="section-description">
+                Manage your website pages and content
+              </p>
+              <TenantPageManagerPro />
+            </div>
+          );
+        }
+        return null;
       
       case 'users':
         return (

@@ -48,6 +48,7 @@ class User {
       status: this.status,
       email_verified: this.email_verified,
       last_login: this.last_login,
+      tenant: this.tenant, // Include tenant information
       created_at: this.created_at,
       updated_at: this.updated_at
     };

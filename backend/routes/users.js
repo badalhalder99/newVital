@@ -5,6 +5,7 @@ const Tenant = require('../models/Tenant');
 const Subscription = require('../models/Subscription');
 const { requireTenant } = require('../middleware/tenant');
 const { createTenantDatabase } = require('../config/database');
+const { authenticateToken } = require('../middleware/auth');
 const router = express.Router();
 
 // Get all tenants for frontend dropdown
@@ -320,6 +321,40 @@ router.post('/', async (req, res) => {
       success: false, 
       message: error.message || 'Failed to create user' 
     });
+  }
+});
+
+// Get current user info (must be before /:id route)
+router.get('/me', authenticateToken, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Not authenticated' 
+      });
+    }
+
+    // Get user info from the main database
+    const { getMongoDb } = require('../config/database');
+    const db = getMongoDb();
+    const { ObjectId } = require('mongodb');
+    
+    console.log('Getting user info for user:', req.user);
+    console.log('User ID from token:', req.user._id);
+    const user = await db.collection('users').findOne({ _id: new ObjectId(req.user._id) });
+    
+    if (user) {
+      // Remove password from response
+      const { password, ...userData } = user;
+      console.log('User data found:', { ...userData, password: '[HIDDEN]' });
+      res.json({ success: true, data: userData });
+    } else {
+      console.log('User not found in database');
+      res.status(404).json({ success: false, message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Get current user error:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch user info' });
   }
 });
 

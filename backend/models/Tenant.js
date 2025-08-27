@@ -6,6 +6,7 @@ class Tenant {
     this._id = tenantData._id || tenantData.id;
     this.name = tenantData.name;
     this.subdomain = tenantData.subdomain;
+    this.slug = tenantData.slug || tenantData.subdomain; // Use subdomain as slug
     this.database_name = tenantData.database_name;
     this.status = tenantData.status || 'active';
     this.settings = tenantData.settings || {};
@@ -23,6 +24,7 @@ class Tenant {
     const result = await collection.insertOne({
       name: this.name,
       subdomain: this.subdomain,
+      slug: this.slug,
       database_name: this.database_name,
       status: this.status,
       settings: this.settings,
