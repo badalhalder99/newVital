@@ -18,10 +18,21 @@ const tenantWebsiteRoutes = require('./routes/tenantWebsite');
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-// Middleware
+// Middleware - Allow all localhost ports for development
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3003', 'http://localhost:3004'],
-  credentials: true
+  origin: [
+    'http://localhost:3000', 
+    'http://localhost:3001', 
+    'http://localhost:3002', 
+    'http://localhost:3003', 
+    'http://localhost:3004',
+    'http://localhost:3005',
+    'http://localhost:3006'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json());
@@ -47,7 +58,7 @@ app.use(tenantIdentificationMiddleware);
 app.use(tenantIsolation());
 
 // Routes
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/tenants', tenantRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);

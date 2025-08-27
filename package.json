@@ -1,0 +1,23 @@
+{
+  "name": "vital---copy",
+  "version": "1.0.0",
+  "description": "A powerful web application that allows multiple businesses (tenants) to use the same software while keeping their data completely separate. Think of it like apartment building - multiple tenants live in the same building, but each has their own private space.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badalhalder99/newVital.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/badalhalder99/newVital/issues"
+  },
+  "homepage": "https://github.com/badalhalder99/newVital#readme",
+  "dependencies": {
+    "fs-extra": "^11.3.1"
+  }
+}

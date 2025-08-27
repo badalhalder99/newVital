@@ -7,7 +7,8 @@
       "Bash(npm start)",
       "Bash(taskkill:*)",
       "Bash(rm:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(PORT=3011 npm start)"
     ],
     "deny": []
   }
