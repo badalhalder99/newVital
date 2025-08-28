@@ -21,10 +21,12 @@ app.use(express.urlencoded({ extended: true }));
 const authRoutes = require('./routes/auth');
 const tenantPageRoutes = require('./routes/tenantPages');
 const tenantSettingsRoutes = require('./routes/tenantSettings');
+const contentRoutes = require('./routes/content');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/pages', tenantPageRoutes);
 app.use('/api/settings', tenantSettingsRoutes);
+app.use('/api/content', contentRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

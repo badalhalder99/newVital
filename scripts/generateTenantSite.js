@@ -10,6 +10,90 @@ class TenantSiteGenerator {
     this.templateFrontendDir = path.join(projectRoot, 'frontend');
   }
 
+  // Generate unique theme for tenant based on subdomain
+  generateTenantTheme(subdomain, tenantName) {
+    const themes = [
+      {
+        name: 'Ocean Blue',
+        primary: '#0ea5e9',
+        secondary: '#0284c7',
+        accent: '#38bdf8',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+        textColor: '#ffffff'
+      },
+      {
+        name: 'Forest Green',
+        primary: '#10b981',
+        secondary: '#059669',
+        accent: '#34d399',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+        textColor: '#ffffff'
+      },
+      {
+        name: 'Sunset Orange',
+        primary: '#f59e0b',
+        secondary: '#d97706',
+        accent: '#fbbf24',
+        background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+        textColor: '#ffffff'
+      },
+      {
+        name: 'Royal Purple',
+        primary: '#8b5cf6',
+        secondary: '#7c3aed',
+        accent: '#a78bfa',
+        background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+        textColor: '#ffffff'
+      },
+      {
+        name: 'Rose Pink',
+        primary: '#ec4899',
+        secondary: '#db2777',
+        accent: '#f472b6',
+        background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+        textColor: '#ffffff'
+      },
+      {
+        name: 'Emerald Teal',
+        primary: '#06b6d4',
+        secondary: '#0891b2',
+        accent: '#22d3ee',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+        textColor: '#ffffff'
+      },
+      {
+        name: 'Crimson Red',
+        primary: '#ef4444',
+        secondary: '#dc2626',
+        accent: '#f87171',
+        background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+        textColor: '#ffffff'
+      },
+      {
+        name: 'Golden Yellow',
+        primary: '#eab308',
+        secondary: '#ca8a04',
+        accent: '#facc15',
+        background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+        textColor: '#ffffff'
+      }
+    ];
+
+    // Generate consistent theme index based on subdomain
+    let hash = 0;
+    for (let i = 0; i < subdomain.length; i++) {
+      const char = subdomain.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    
+    const themeIndex = Math.abs(hash) % themes.length;
+    const selectedTheme = themes[themeIndex];
+    
+    console.log(`🎨 Generated theme "${selectedTheme.name}" for ${tenantName}`);
+    return selectedTheme;
+  }
+
   async generateSite(tenantData) {
     const { subdomain, name, database_name } = tenantData;
     const siteDir = path.join(this.sitesDir, subdomain);
@@ -19,6 +103,9 @@ class TenantSiteGenerator {
     console.log(`Generating site for tenant: ${name} (${subdomain})`);
 
     try {
+      // Generate unique theme for this tenant
+      const theme = this.generateTenantTheme(subdomain, name);
+      
       // Create site directory structure
       await fs.ensureDir(siteDir);
       await fs.ensureDir(backendDir);
@@ -28,7 +115,7 @@ class TenantSiteGenerator {
       await this.setupBackend(backendDir, tenantData);
       
       // Copy and customize frontend
-      await this.setupFrontend(frontendDir, tenantData);
+      await this.setupFrontend(frontendDir, tenantData, theme);
 
       console.log(`✅ Site generated successfully at: ${siteDir}`);
       return siteDir;
@@ -139,7 +226,7 @@ startServer();
     console.log(`✅ Backend setup complete for ${subdomain}`);
   }
 
-  async setupFrontend(frontendDir, tenantData) {
+  async setupFrontend(frontendDir, tenantData, theme) {
     const { subdomain, name } = tenantData;
     
     // Copy frontend template
@@ -211,7 +298,105 @@ export default api;
 
     await fs.writeFile(path.join(frontendDir, 'src', 'services', 'api.js'), apiConfigContent);
 
+    // Generate custom theme CSS for this tenant
+    await this.generateCustomThemeCSS(frontendDir, theme, subdomain);
+
     console.log(`✅ Frontend setup complete for ${subdomain}`);
+  }
+
+  // Generate custom theme CSS file for tenant
+  async generateCustomThemeCSS(frontendDir, theme, subdomain) {
+    const customCss = `/* Custom Theme for ${subdomain} - ${theme.name} */
+:root {
+  --primary-color: ${theme.primary};
+  --secondary-color: ${theme.secondary};
+  --accent-color: ${theme.accent};
+  --text-color: ${theme.textColor};
+  --bg-gradient: ${theme.background};
+}
+
+/* Override tenant background */
+.tenant-bg-shapes {
+  background: var(--bg-gradient) !important;
+}
+
+/* Custom tenant colors */
+.tenant-shape {
+  background: linear-gradient(45deg, var(--primary-color), transparent) !important;
+}
+
+.tenant-logo-placeholder {
+  border-color: var(--primary-color) !important;
+}
+
+.tenant-nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+.tenant-mobile-nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+.tenant-hero-content .highlight {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.tenant-cta-button {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+}
+
+.tenant-cta-button:hover {
+  background: linear-gradient(135deg, var(--secondary-color), var(--primary-color)) !important;
+}
+
+.tenant-cta-secondary:hover {
+  border-color: var(--primary-color) !important;
+}
+
+.tenant-feature-icon {
+  background: var(--primary-color) !important;
+  opacity: 0.2 !important;
+  border: 2px solid var(--primary-color) !important;
+}
+
+.tenant-glass-green {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+  opacity: 0.1 !important;
+  border: 1px solid var(--primary-color) !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .tenant-hero-content .highlight {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color)) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+}
+`;
+
+    // Write the custom theme CSS file
+    const stylesDir = path.join(frontendDir, 'src', 'styles');
+    await fs.ensureDir(stylesDir);
+    await fs.writeFile(path.join(stylesDir, 'theme.css'), customCss);
+    
+    // Also update the tenant.css file to import the theme
+    const tenantCssPath = path.join(stylesDir, 'tenant.css');
+    if (await fs.pathExists(tenantCssPath)) {
+      let tenantCss = await fs.readFile(tenantCssPath, 'utf8');
+      
+      // Add import for theme.css at the top
+      const importStatement = '@import "./theme.css";\n\n';
+      if (!tenantCss.includes('@import "./theme.css"')) {
+        tenantCss = importStatement + tenantCss;
+        await fs.writeFile(tenantCssPath, tenantCss);
+      }
+    }
+    
+    console.log(`🎨 Generated custom theme CSS for ${subdomain} (${theme.name})`);
   }
 
   getPortOffset(subdomain) {

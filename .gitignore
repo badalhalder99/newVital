@@ -2,6 +2,8 @@
 /node_modules/
 /frontend/node_modules/
 /backend/node_modules/
+/sites/*/node_modules/
+/sites/**/node_modules/
  
 # Ignore build artifacts from frontend React app
 /frontend/build/
@@ -20,6 +22,13 @@
 /backend/.env.test.local
 /backend/.cache/
 /backend/.vscode/
+ 
+# Ignore build artifacts from sites
+/sites/*/build/
+/sites/*/dist/
+/sites/*/.env*
+/sites/*/.cache/
+/sites/*/.vscode/
  
 # Ignore logs
 *.log

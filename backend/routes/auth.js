@@ -185,7 +185,9 @@ router.post('/register', async (req, res) => {
       redirect: role === 'tenant' && tenantRecord ? {
         type: 'tenant_site',
         subdomain: tenantRecord.subdomain,
-        url: `http://localhost:${3040 + getPortOffset(tenantRecord.subdomain)}`
+        url: tenantRecord.subdomain === 'mysass' ? 
+          `http://localhost:3003/mysass` : 
+          `http://localhost:${3040 + getPortOffset(tenantRecord.subdomain)}`
       } : null
     });
   } catch (error) {
@@ -234,7 +236,9 @@ router.post('/login', (req, res, next) => {
         redirectInfo = {
           type: 'tenant_site',
           subdomain: subdomain,
-          url: `http://localhost:${3040 + getPortOffset(subdomain)}`
+          url: subdomain === 'mysass' ? 
+            `http://localhost:3003/mysass` : 
+            `http://localhost:${3040 + getPortOffset(subdomain)}`
         };
       }
     }

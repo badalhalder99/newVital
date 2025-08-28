@@ -11,6 +11,19 @@ import AuthSuccessPage from './pages/AuthSuccessPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import TenantHomePage from './pages/tenant/TenantHomePage';
 import TenantPage from './pages/tenant/TenantPage';
+// MySaaS Components
+import MySaaSLayout from './components/mysass/MySaaSLayout';
+import MySaaSHomePage from './components/mysass/HomePage';
+import MySaaSAboutPage from './components/mysass/AboutPage';
+import MySaaSServicesPage from './components/mysass/ServicesPage';
+import MySaaSProductsPage from './components/mysass/ProductsPage';
+import MySaaSTeamPage from './components/mysass/TeamPage';
+import MySaaSContactPage from './components/mysass/ContactPage';
+import MySaaSDashboardPage from './components/mysass/DashboardPage';
+import MySaaSTeamManagement from './components/mysass/TeamManagement';
+import MySaaSProductCategoriesManagement from './components/mysass/ProductCategoriesManagement';
+import MySaaSProductsManagement from './components/mysass/ProductsManagement';
+import ScrollToTop from './components/ScrollToTop';
 import { useHeatmapTracking } from './hooks/useHeatmapTracking';
 import screenshotService from './services/screenshotService';
 import './App.css';
@@ -18,6 +31,7 @@ import './App.css';
 function AppContent() {
   const location = useLocation();
   const isDashboard = location.pathname.includes('/dashboard') || location.pathname.includes('/admin') || location.pathname.includes('/tenant');
+  const isMySaaS = location.pathname.startsWith('/mysass');
   const isTenantSite = location.pathname.match(/^\/[^\/]+$/) || location.pathname.match(/^\/[^\/]+\/(about|services|testimonials|contact)$/);
   const isGlobalSite = location.pathname === '/' || location.pathname.includes('/signin') || location.pathname.includes('/signup') || location.pathname.includes('/auth');
   
@@ -30,7 +44,7 @@ function AppContent() {
 
   // Auto-capture screenshot on first load (only for non-dashboard pages)
   useEffect(() => {
-    if (!isDashboard && !isTenantSite) {
+    if (!isDashboard && !isTenantSite && !isMySaaS) {
       // Add small delay to ensure page is fully rendered
       const timer = setTimeout(() => {
         screenshotService.captureViewportOnLoad(location.pathname);
@@ -38,12 +52,12 @@ function AppContent() {
       
       return () => clearTimeout(timer);
     }
-  }, [location.pathname, isDashboard, isTenantSite]);
+  }, [location.pathname, isDashboard, isTenantSite, isMySaaS]);
 
   return (
     <div className="App">
       {isGlobalSite && <Header />}
-      <main className={(isDashboard || isTenantSite) ? "" : "main-content"}>
+      <main className={(isDashboard || isTenantSite || isMySaaS) ? "" : "main-content"}>
         <Routes>
           {/* Global Site Routes */}
           <Route path="/" element={<HomePage />} />
@@ -77,6 +91,72 @@ function AppContent() {
             } 
           />
 
+          {/* MySaaS Routes */}
+          <Route 
+            path="/mysass" 
+            element={
+              <MySaaSLayout>
+                <MySaaSHomePage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/mysass/about" 
+            element={
+              <MySaaSLayout>
+                <MySaaSAboutPage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/mysass/services" 
+            element={
+              <MySaaSLayout>
+                <MySaaSServicesPage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/mysass/products" 
+            element={
+              <MySaaSLayout>
+                <MySaaSProductsPage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/mysass/team" 
+            element={
+              <MySaaSLayout>
+                <MySaaSTeamPage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/mysass/contact" 
+            element={
+              <MySaaSLayout>
+                <MySaaSContactPage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/mysass/dashboard" 
+            element={<MySaaSDashboardPage />} 
+          />
+          <Route 
+            path="/mysass/dashboard/team" 
+            element={<MySaaSTeamManagement />} 
+          />
+          <Route 
+            path="/mysass/dashboard/categories" 
+            element={<MySaaSProductCategoriesManagement />} 
+          />
+          <Route 
+            path="/mysass/dashboard/products" 
+            element={<MySaaSProductsManagement />} 
+          />
+
           {/* Tenant Website Routes */}
           <Route path="/:tenantName" element={<TenantHomePage />} />
           <Route path="/:tenantName/about" element={<TenantPage pageType="about" />} />
@@ -94,6 +174,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <AppContent />
       </Router>
     </AuthProvider>

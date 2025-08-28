@@ -1,0 +1,591 @@
+/* MySaaS - Harmony Sourcing Custom Styles */
+
+/* Color Palette inspired by the design */
+:root {
+  --mysass-primary: #10b981; /* Green accent */
+  --mysass-secondary: #059669; /* Darker green */
+  --mysass-background: #0f172a; /* Dark navy */
+  --mysass-surface: #1e293b; /* Lighter dark */
+  --mysass-card: #334155; /* Card background */
+  --mysass-text-primary: #ffffff;
+  --mysass-text-secondary: #94a3b8;
+  --mysass-text-muted: #64748b;
+  --mysass-accent-blue: #3b82f6;
+  --mysass-accent-purple: #8b5cf6;
+  --mysass-accent-cyan: #06b6d4;
+  --mysass-accent-orange: #f59e0b;
+  --mysass-accent-red: #ef4444;
+  --mysass-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0d4f3c 100%);
+}
+
+/* Global Styles */
+body {
+  background: var(--mysass-gradient);
+  color: var(--mysass-text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Header Styles */
+.mysass-header {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.mysass-nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+.mysass-logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--mysass-text-primary);
+  text-decoration: none;
+}
+
+.mysass-logo::before {
+  content: '';
+  width: 40px;
+  height: 40px;
+  background: var(--mysass-primary);
+  border-radius: 8px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mysass-nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mysass-nav-link {
+  color: var(--mysass-text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.mysass-nav-link:hover,
+.mysass-nav-link.active {
+  color: var(--mysass-primary);
+}
+
+.mysass-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--mysass-primary);
+  transition: width 0.3s ease;
+}
+
+.mysass-nav-link:hover::after,
+.mysass-nav-link.active::after {
+  width: 100%;
+}
+
+/* Hero Section */
+.mysass-hero {
+  padding: 120px 2rem;
+  text-align: left;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mysass-hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--mysass-text-primary) 0%, var(--mysass-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.mysass-hero .highlight {
+  color: var(--mysass-primary);
+  font-weight: 700;
+}
+
+.mysass-hero p {
+  font-size: 1.25rem;
+  color: var(--mysass-text-secondary);
+  max-width: 600px;
+  margin-bottom: 3rem;
+  line-height: 1.7;
+}
+
+.mysass-cta-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.mysass-btn {
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.mysass-btn-primary {
+  background: linear-gradient(135deg, var(--mysass-primary), var(--mysass-secondary));
+  color: white;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+}
+
+.mysass-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+}
+
+.mysass-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--mysass-text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.mysass-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--mysass-primary);
+}
+
+/* Section Styles */
+.mysass-section {
+  padding: 100px 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mysass-section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--mysass-text-primary);
+}
+
+.mysass-section-subtitle {
+  font-size: 1.25rem;
+  color: var(--mysass-text-secondary);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 4rem;
+}
+
+/* Card Styles */
+.mysass-card {
+  background: rgba(51, 65, 85, 0.5);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.mysass-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Grid Layouts */
+.mysass-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.mysass-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.mysass-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.mysass-grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Features Grid */
+.mysass-feature {
+  text-align: center;
+  padding: 2rem;
+}
+
+.mysass-feature-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, var(--mysass-primary), var(--mysass-secondary));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+}
+
+.mysass-feature h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--mysass-text-primary);
+}
+
+.mysass-feature p {
+  color: var(--mysass-text-secondary);
+  line-height: 1.6;
+}
+
+/* Stats/Metrics */
+.mysass-stats {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 4rem 0;
+}
+
+.mysass-stat {
+  text-align: center;
+}
+
+.mysass-stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--mysass-primary);
+  display: block;
+}
+
+.mysass-stat-label {
+  font-size: 1rem;
+  color: var(--mysass-text-secondary);
+  font-weight: 500;
+}
+
+/* Progress Bars */
+.mysass-progress {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  height: 8px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.mysass-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--mysass-primary), var(--mysass-secondary));
+  border-radius: 8px;
+  transition: width 0.3s ease;
+}
+
+/* Footer */
+.mysass-footer {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4rem 2rem 2rem;
+  margin-top: 6rem;
+}
+
+.mysass-footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.mysass-footer-section h4 {
+  color: var(--mysass-text-primary);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.mysass-footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mysass-footer-links li {
+  margin-bottom: 0.5rem;
+}
+
+.mysass-footer-links a {
+  color: var(--mysass-text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.mysass-footer-links a:hover {
+  color: var(--mysass-primary);
+}
+
+.mysass-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 2rem;
+  text-align: center;
+  color: var(--mysass-text-muted);
+}
+
+/* Dashboard Specific Styles */
+.mysass-dashboard {
+  min-height: 100vh;
+  background: var(--mysass-background);
+}
+
+.mysass-dashboard-header {
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mysass-dashboard-content {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.mysass-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.mysass-metric-card {
+  background: rgba(51, 65, 85, 0.5);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.mysass-metric-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--mysass-primary);
+}
+
+.mysass-metric-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.mysass-metric-icon.blue { background: var(--mysass-accent-blue); }
+.mysass-metric-icon.green { background: var(--mysass-primary); }
+.mysass-metric-icon.purple { background: var(--mysass-accent-purple); }
+.mysass-metric-icon.orange { background: var(--mysass-accent-orange); }
+.mysass-metric-icon.cyan { background: var(--mysass-accent-cyan); }
+.mysass-metric-icon.red { background: var(--mysass-accent-red); }
+
+.mysass-metric-content h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--mysass-text-primary);
+  margin: 0;
+}
+
+.mysass-metric-content p {
+  color: var(--mysass-text-secondary);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Management Cards */
+.mysass-management-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.mysass-management-card {
+  background: rgba(51, 65, 85, 0.5);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2.5rem;
+  transition: all 0.3s ease;
+}
+
+.mysass-management-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.mysass-management-card h3 {
+  color: var(--mysass-text-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.mysass-management-card p {
+  color: var(--mysass-text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mysass-nav {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .mysass-nav-links {
+    gap: 1rem;
+  }
+  
+  .mysass-hero {
+    padding: 80px 1rem;
+    text-align: center;
+  }
+  
+  .mysass-section {
+    padding: 60px 1rem;
+  }
+  
+  .mysass-cta-group {
+    justify-content: center;
+  }
+  
+  .mysass-stats {
+    gap: 1rem;
+  }
+  
+  .mysass-dashboard-content {
+    padding: 1rem;
+  }
+  
+  .mysass-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .mysass-management-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .mysass-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .mysass-metric-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .mysass-footer-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mysass-fade-in {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Form Styles */
+.mysass-form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.mysass-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.mysass-form-label {
+  display: block;
+  color: var(--mysass-text-primary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.mysass-form-input,
+.mysass-form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: var(--mysass-text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.mysass-form-input:focus,
+.mysass-form-textarea:focus {
+  outline: none;
+  border-color: var(--mysass-primary);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.mysass-form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}

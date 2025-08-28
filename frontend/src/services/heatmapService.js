@@ -198,8 +198,14 @@ class HeatmapService {
     // If no persistent ID exists, create one based on fingerprint
     if (!persistentGuestId) {
       persistentGuestId = `guest_${fingerprint.hash}`;
-      localStorage.setItem(persistentKey, persistentGuestId);
-      console.log('🆕 Created persistent guest ID:', persistentGuestId);
+      try {
+        localStorage.setItem(persistentKey, persistentGuestId);
+        console.log('🆕 Created persistent guest ID:', persistentGuestId);
+      } catch (error) {
+        console.warn('🚫 Failed to store persistent guest ID:', error);
+        // Use a temporary ID if storage fails
+        persistentGuestId = `temp_guest_${fingerprint.hash}`;
+      }
     }
 
     // Use the persistent ID as the guest key (not the current fingerprint)
@@ -241,8 +247,20 @@ class HeatmapService {
         pages: [this.currentPage || '/']
       };
 
-      localStorage.setItem(guestKey, JSON.stringify(guestInfo));
-      console.log('🆕 New guest user detected:', guestInfo.guestId, 'Visit count: 1');
+      try {
+        localStorage.setItem(guestKey, JSON.stringify(guestInfo));
+        console.log('🆕 New guest user detected:', guestInfo.guestId, 'Visit count: 1');
+      } catch (error) {
+        console.warn('🚫 Failed to store guest info:', error.message);
+        this.cleanupLocalStorage();
+        // Try storing again after cleanup
+        try {
+          localStorage.setItem(guestKey, JSON.stringify(guestInfo));
+          console.log('✅ Guest info stored after cleanup');
+        } catch (retryError) {
+          console.error('🚫 Failed to store guest info even after cleanup:', retryError.message);
+        }
+      }
     } else {
       // Update session start time for current session
       if (!guestInfo.sessionStartTime || isInteraction || forceIncrement) {
@@ -316,7 +334,18 @@ class HeatmapService {
       // Always update last interaction time if it's an interaction
       if (isInteraction || forceIncrement) {
         guestInfo.lastInteractionTime = now;
-        localStorage.setItem(guestKey, JSON.stringify(guestInfo));
+        try {
+          localStorage.setItem(guestKey, JSON.stringify(guestInfo));
+        } catch (error) {
+          console.warn('🚫 Failed to update guest info:', error.message);
+          this.cleanupLocalStorage();
+          // Try storing again after cleanup
+          try {
+            localStorage.setItem(guestKey, JSON.stringify(guestInfo));
+          } catch (retryError) {
+            console.error('🚫 Failed to update guest info even after cleanup:', retryError.message);
+          }
+        }
       }
     }
 
@@ -405,6 +434,59 @@ class HeatmapService {
       return { sessionArray, sessionDuration };
     }
     return null;
+  }
+
+  // Cleanup localStorage to free up space when quota is exceeded
+  cleanupLocalStorage() {
+    try {
+      console.log('🧹 Cleaning up localStorage to free space...');
+      let removedCount = 0;
+      
+      // Remove old failed tracking data (keep only latest 10)
+      const failedRequests = JSON.parse(localStorage.getItem('failedTrackingData') || '[]');
+      if (failedRequests.length > 10) {
+        const trimmed = failedRequests.slice(-10);
+        localStorage.setItem('failedTrackingData', JSON.stringify(trimmed));
+        removedCount += failedRequests.length - trimmed.length;
+      }
+
+      // Remove old heatmap data
+      const keys = Object.keys(localStorage);
+      keys.forEach(key => {
+        if (key.startsWith('heatmap_data_') || key.startsWith('visitor_')) {
+          localStorage.removeItem(key);
+          removedCount++;
+        }
+      });
+
+      // Remove very old guest fingerprint data (keep only current ones)
+      const currentTime = Date.now();
+      keys.forEach(key => {
+        if (key.startsWith('guest_fingerprint_')) {
+          try {
+            const guestData = JSON.parse(localStorage.getItem(key) || '{}');
+            const lastInteraction = guestData.lastInteractionTime || 0;
+            const daysSinceLastInteraction = (currentTime - lastInteraction) / (1000 * 60 * 60 * 24);
+            
+            // Remove guest data older than 30 days
+            if (daysSinceLastInteraction > 30) {
+              localStorage.removeItem(key);
+              removedCount++;
+            }
+          } catch (e) {
+            // Remove corrupted guest data
+            localStorage.removeItem(key);
+            removedCount++;
+          }
+        }
+      });
+
+      console.log(`✅ Cleaned up ${removedCount} localStorage entries`);
+      return removedCount;
+    } catch (error) {
+      console.warn('Failed to cleanup localStorage:', error);
+      return 0;
+    }
   }
 
   // Clear guest user data (for testing or reset purposes)
@@ -600,8 +682,13 @@ class HeatmapService {
         duration: null
       };
 
-      localStorage.setItem(visitorKey, JSON.stringify(visitorInfo));
-      console.log('💾 Saved visitor info to localStorage as fallback:', visitorInfo);
+      try {
+        localStorage.setItem(visitorKey, JSON.stringify(visitorInfo));
+        console.log('💾 Saved visitor info to localStorage as fallback:', visitorInfo);
+      } catch (storageError) {
+        console.warn('🚫 Failed to save visitor info to localStorage:', storageError.message);
+        this.cleanupLocalStorage();
+      }
     } catch (error) {
       console.warn('Failed to save visitor info fallback:', error);
     }
@@ -843,22 +930,38 @@ class HeatmapService {
       console.warn('❌ Failed to send tracking data:', error.code, error.message);
       
       // Store failed requests for retry
-      const failedRequests = JSON.parse(localStorage.getItem('failedTrackingData') || '[]');
-      failedRequests.push({
-        data: data,
-        timestamp: Date.now(),
-        error: error.message,
-        retryCount: 0
-      });
-      
-      // Keep only last 100 failed requests to prevent localStorage overflow
-      if (failedRequests.length > 100) {
-        failedRequests.splice(0, failedRequests.length - 100);
+      try {
+        const failedRequests = JSON.parse(localStorage.getItem('failedTrackingData') || '[]');
+        failedRequests.push({
+          data: data,
+          timestamp: Date.now(),
+          error: error.message,
+          retryCount: 0
+        });
+        
+        // Keep only last 10 failed requests to prevent localStorage overflow
+        if (failedRequests.length > 10) {
+          failedRequests.splice(0, failedRequests.length - 10);
+        }
+        
+        localStorage.setItem('failedTrackingData', JSON.stringify(failedRequests));
+      } catch (storageError) {
+        console.warn('🚫 Failed to store failed tracking data:', storageError.message);
+        // If we can't store failed requests, clean up and try once more
+        this.cleanupLocalStorage();
+        try {
+          localStorage.setItem('failedTrackingData', JSON.stringify([{
+            data: data,
+            timestamp: Date.now(),
+            error: error.message,
+            retryCount: 0
+          }]));
+        } catch (retryError) {
+          console.error('🚫 Cannot store tracking data even after cleanup:', retryError.message);
+        }
       }
       
-      localStorage.setItem('failedTrackingData', JSON.stringify(failedRequests));
-      
-      console.log('📦 Tracking data stored locally for retry. Total pending:', failedRequests.length);
+      console.log('📦 Tracking data handled (may be stored locally for retry)');
       
       // Don't throw error - let the app continue running
       return { status: 'stored_locally', error: error.message, stored: true };
@@ -1031,10 +1134,23 @@ class HeatmapService {
       const existing = this.getLocalHeatmapData(page);
       existing.push(data);
 
-      // Keep only last 1000 points to avoid storage bloat
-      const trimmed = existing.slice(-1000);
-      localStorage.setItem(`heatmap_data_${page}`, JSON.stringify(trimmed));
-      console.log('💾 Saved to localStorage as fallback:', trimmed.length, 'points for', page);
+      // Keep only last 100 points to avoid storage bloat
+      const trimmed = existing.slice(-100);
+      try {
+        localStorage.setItem(`heatmap_data_${page}`, JSON.stringify(trimmed));
+        console.log('💾 Saved to localStorage as fallback:', trimmed.length, 'points for', page);
+      } catch (storageError) {
+        console.warn('🚫 Failed to save heatmap data to localStorage:', storageError.message);
+        this.cleanupLocalStorage();
+        // Try once more with even smaller dataset
+        try {
+          const miniTrimmed = existing.slice(-10);
+          localStorage.setItem(`heatmap_data_${page}`, JSON.stringify(miniTrimmed));
+          console.log('💾 Saved minimal heatmap data after cleanup:', miniTrimmed.length, 'points');
+        } catch (retryError) {
+          console.error('🚫 Cannot save heatmap data even after cleanup:', retryError.message);
+        }
+      }
     } catch (error) {
       console.warn('Failed to save local heatmap data fallback:', error);
     }

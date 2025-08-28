@@ -14,6 +14,10 @@ const subscriptionRoutes = require('./routes/subscriptions');
 const analyticsRoutes = require('./routes/analytics');
 const heatmapRoutes = require('./routes/heatmap');
 const tenantWebsiteRoutes = require('./routes/tenantWebsite');
+const mysassRoutes = require('./routes/mysass');
+const teamMembersRoutes = require('./routes/teamMembers');
+const productCategoriesRoutes = require('./routes/productCategories');
+const productsRoutes = require('./routes/products');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -35,8 +39,8 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Session configuration
 app.use(session({
@@ -65,6 +69,10 @@ app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/heatmap', heatmapRoutes);
 app.use('/api/tenant-website', tenantWebsiteRoutes);
+app.use('/api/mysass', mysassRoutes);
+app.use('/api/team-members', teamMembersRoutes);
+app.use('/api/product-categories', productCategoriesRoutes);
+app.use('/api/products', productsRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

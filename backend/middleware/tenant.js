@@ -136,7 +136,11 @@ function isPublicRoute(path) {
     '/api/users/tenants',  // Allow tenant listing for frontend
     '/api/analytics',  // Allow analytics tracking for all users
     '/api/heatmap',  // Allow heatmap tracking for guest users
-    '/api/tenant-website'  // Allow tenant website API access
+    '/api/tenant-website',  // Allow tenant website API access
+    '/api/team-members',  // Allow team members API access for MySaaS
+    '/api/product-categories',  // Allow product categories API access for MySaaS
+    '/api/products',  // Allow products API access for MySaaS
+    '/api/mysass'  // Allow MySaaS API access
   ];
 
   return publicRoutes.some(route => path.startsWith(route));

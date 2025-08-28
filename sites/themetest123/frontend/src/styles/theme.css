@@ -1,0 +1,70 @@
+/* Custom Theme for themetest123 - Golden Yellow */
+:root {
+  --primary-color: #eab308;
+  --secondary-color: #ca8a04;
+  --accent-color: #facc15;
+  --text-color: #ffffff;
+  --bg-gradient: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+}
+
+/* Override tenant background */
+.tenant-bg-shapes {
+  background: var(--bg-gradient) !important;
+}
+
+/* Custom tenant colors */
+.tenant-shape {
+  background: linear-gradient(45deg, var(--primary-color), transparent) !important;
+}
+
+.tenant-logo-placeholder {
+  border-color: var(--primary-color) !important;
+}
+
+.tenant-nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+.tenant-mobile-nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+.tenant-hero-content .highlight {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.tenant-cta-button {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+}
+
+.tenant-cta-button:hover {
+  background: linear-gradient(135deg, var(--secondary-color), var(--primary-color)) !important;
+}
+
+.tenant-cta-secondary:hover {
+  border-color: var(--primary-color) !important;
+}
+
+.tenant-feature-icon {
+  background: var(--primary-color) !important;
+  opacity: 0.2 !important;
+  border: 2px solid var(--primary-color) !important;
+}
+
+.tenant-glass-green {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+  opacity: 0.1 !important;
+  border: 1px solid var(--primary-color) !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .tenant-hero-content .highlight {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color)) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+}
