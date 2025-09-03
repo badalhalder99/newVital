@@ -78,23 +78,23 @@ const HomePage = () => {
               </Link>
             </div>
           </div>
-          
+
           {/* Product Images Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div className="mysassProductItemWrap">
             <div style={{
               background: 'rgba(255, 255, 255, 0.1)',
               borderRadius: '16px',
-              padding: '2rem',
+              padding: '1rem',
               textAlign: 'center',
               backdropFilter: 'blur(10px)',
               border: '1px solid rgba(255, 255, 255, 0.1)'
             }}>
-              <img 
-                src="/7.png" 
+              <img
+                src="/7.png"
                 alt="Premium Jacket"
-                style={{ 
-                  width: '80px', 
-                  height: '80px', 
+                style={{
+                  width: '80px',
+                  height: '80px',
                   objectFit: 'cover',
                   borderRadius: '8px',
                   marginBottom: '1rem'
@@ -107,17 +107,17 @@ const HomePage = () => {
             <div style={{
               background: 'rgba(255, 255, 255, 0.1)',
               borderRadius: '16px',
-              padding: '2rem',
+              padding: '1rem',
               textAlign: 'center',
               backdropFilter: 'blur(10px)',
               border: '1px solid rgba(255, 255, 255, 0.1)'
             }}>
-              <img 
-                src="/5.png" 
+              <img
+                src="/5.png"
                 alt="Sustainable Shorts"
-                style={{ 
-                  width: '80px', 
-                  height: '80px', 
+                style={{
+                  width: '80px',
+                  height: '80px',
                   objectFit: 'cover',
                   borderRadius: '8px',
                   marginBottom: '1rem'
@@ -130,17 +130,17 @@ const HomePage = () => {
             <div style={{
               background: 'rgba(255, 255, 255, 0.1)',
               borderRadius: '16px',
-              padding: '2rem',
+              padding: '1rem',
               textAlign: 'center',
               backdropFilter: 'blur(10px)',
               border: '1px solid rgba(255, 255, 255, 0.1)'
             }}>
-              <img 
-                src="/6.png" 
+              <img
+                src="/6.png"
                 alt="Organic Sweater"
-                style={{ 
-                  width: '80px', 
-                  height: '80px', 
+                style={{
+                  width: '80px',
+                  height: '80px',
                   objectFit: 'cover',
                   borderRadius: '8px',
                   marginBottom: '1rem'
@@ -153,17 +153,17 @@ const HomePage = () => {
             <div style={{
               background: 'rgba(255, 255, 255, 0.1)',
               borderRadius: '16px',
-              padding: '2rem',
+              padding: '1rem',
               textAlign: 'center',
               backdropFilter: 'blur(10px)',
               border: '1px solid rgba(255, 255, 255, 0.1)'
             }}>
-              <img 
-                src="/3.png" 
+              <img
+                src="/3.png"
                 alt="Graphic Tee"
-                style={{ 
-                  width: '80px', 
-                  height: '80px', 
+                style={{
+                  width: '80px',
+                  height: '80px',
                   objectFit: 'cover',
                   borderRadius: '8px',
                   marginBottom: '1rem'
@@ -181,7 +181,7 @@ const HomePage = () => {
       <section className="mysass-section">
         <div className="mysass-grid mysass-grid-2" style={{ alignItems: 'center', gap: '4rem' }}>
           <div>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '2rem', color: 'var(--mysass-text-primary)' }}>
+            <h2 className="mysass-section-title">
               About Harmony Sourcing
             </h2>
             <p style={{ color: 'var(--mysass-text-secondary)', fontSize: '1.1rem', lineHeight: '1.7', marginBottom: '2rem' }}>
@@ -198,9 +198,9 @@ const HomePage = () => {
             </Link>
           </div>
           <div className="mysass-card" style={{ textAlign: 'center', padding: '3rem' }}>
-            <div style={{ 
-              width: '200px', 
-              height: '200px', 
+            <div style={{
+              width: '200px',
+              height: '200px',
               background: 'rgba(255, 255, 255, 0.1)',
               borderRadius: '16px',
               margin: '0 auto 1rem',
@@ -210,12 +210,12 @@ const HomePage = () => {
               backdropFilter: 'blur(10px)',
               border: '1px solid rgba(255, 255, 255, 0.1)'
             }}>
-              <img 
-                src="/4.png" 
+              <img
+                src="/4.png"
                 alt="Quality T-shirt"
-                style={{ 
-                  width: '150px', 
-                  height: '150px', 
+                style={{
+                  width: '150px',
+                  height: '150px',
                   objectFit: 'cover',
                   borderRadius: '12px'
                 }}
@@ -299,10 +299,10 @@ const HomePage = () => {
                   <span key={i} style={{ color: 'var(--mysass-primary)', fontSize: '1.5rem' }}>★</span>
                 ))}
               </div>
-              <p style={{ 
-                color: 'var(--mysass-text-secondary)', 
-                fontSize: '1.1rem', 
-                lineHeight: '1.6', 
+              <p style={{
+                color: 'var(--mysass-text-secondary)',
+                fontSize: '1.1rem',
+                lineHeight: '1.6',
                 marginBottom: '2rem',
                 fontStyle: 'italic'
               }}>
@@ -327,7 +327,7 @@ const HomePage = () => {
         <p className="mysass-section-subtitle">
           Explore our diverse range of sustainable fashion products
         </p>
-        
+
         <div className="mysass-grid mysass-grid-3" style={{ gridTemplateColumns: 'repeat(6, 1fr)', gap: '1rem' }}>
           {[
             { src: '/4.png', name: 'Casual Tee' },
@@ -337,13 +337,13 @@ const HomePage = () => {
             { src: '/2.png', name: 'Summer Dress' },
             { src: '/1.png', name: 'Kids Romper' }
           ].map((product, index) => (
-            <div key={index} className="mysass-card" style={{ 
-              textAlign: 'center', 
+            <div key={index} className="mysass-card" style={{
+              textAlign: 'center',
               padding: '1.5rem 1rem',
               transition: 'all 0.3s ease'
             }}>
-              <img 
-                src={product.src} 
+              <img
+                src={product.src}
                 alt={product.name}
                 style={{
                   width: '60px',
@@ -353,8 +353,8 @@ const HomePage = () => {
                   marginBottom: '1rem'
                 }}
               />
-              <p style={{ 
-                color: 'var(--mysass-text-secondary)', 
+              <p style={{
+                color: 'var(--mysass-text-secondary)',
                 fontSize: '0.85rem',
                 margin: '0'
               }}>
@@ -367,17 +367,17 @@ const HomePage = () => {
 
       {/* CTA Section */}
       <section className="mysass-section">
-        <div className="mysass-card" style={{ 
-          textAlign: 'center', 
+        <div className="mysass-card" style={{
+          textAlign: 'center',
           padding: '4rem',
           background: 'linear-gradient(135deg, var(--mysass-primary), var(--mysass-secondary))',
           color: 'white'
         }}>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', color: 'white' }}>
+          <h2 className="mysass-section-title" style={{ color: 'white' }}>
             Ready to Transform Your Supply Chain?
           </h2>
-          <p style={{ 
-            fontSize: '1.25rem', 
+          <p style={{
+            fontSize: '1.25rem',
             marginBottom: '3rem',
             opacity: '0.9',
             maxWidth: '600px',
@@ -385,11 +385,11 @@ const HomePage = () => {
           }}>
             Join the growing number of brands choosing sustainable, reliable sourcing solutions
           </p>
-          <Link 
-            to="/mysass/contact" 
+          <Link
+            to="/mysass/contact"
             className="mysass-btn"
-            style={{ 
-              background: 'white', 
+            style={{
+              background: 'white',
               color: 'var(--mysass-primary)',
               fontWeight: '600',
               fontSize: '1.1rem',

@@ -58,11 +58,7 @@ const ContactPage = () => {
         <div className="mysass-grid mysass-grid-2" style={{ gap: '4rem', alignItems: 'start' }}>
           {/* Contact Form */}
           <div>
-            <h2 style={{ 
-              color: 'var(--mysass-text-primary)', 
-              fontSize: '2rem',
-              marginBottom: '2rem'
-            }}>
+            <h2 className="mysass-section-title">
               Send us a message
             </h2>
             
@@ -206,11 +202,7 @@ const ContactPage = () => {
 
           {/* Contact Information */}
           <div>
-            <h2 style={{ 
-              color: 'var(--mysass-text-primary)', 
-              fontSize: '2rem',
-              marginBottom: '2rem'
-            }}>
+            <h2 className="mysass-section-title">
               Contact Information
             </h2>
 

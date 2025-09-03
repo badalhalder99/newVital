@@ -115,11 +115,7 @@ const TeamPage = () => {
       <section className="mysass-section">
         <div className="mysass-grid mysass-grid-2" style={{ alignItems: 'center', gap: '4rem' }}>
           <div>
-            <h2 style={{ 
-              fontSize: '2.5rem', 
-              marginBottom: '2rem',
-              color: 'var(--mysass-text-primary)'
-            }}>
+            <h2 className="mysass-section-title">
               About Harmony Sourcing
             </h2>
             <p style={{ 
@@ -355,7 +351,7 @@ const TeamPage = () => {
           background: 'linear-gradient(135deg, var(--mysass-primary), var(--mysass-secondary))',
           color: 'white'
         }}>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', color: 'white' }}>
+          <h2 className="mysass-section-title" style={{ color: 'white' }}>
             Join Our Mission
           </h2>
           <p style={{ 

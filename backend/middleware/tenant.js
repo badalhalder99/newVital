@@ -140,6 +140,10 @@ function isPublicRoute(path) {
     '/api/team-members',  // Allow team members API access for MySaaS
     '/api/product-categories',  // Allow product categories API access for MySaaS
     '/api/products',  // Allow products API access for MySaaS
+    '/api/clients',  // Allow clients API access for MySaaS
+    '/api/certificates',  // Allow certificates API access for MySaaS
+    '/api/testimonials',  // Allow testimonials API access for MySaaS
+    '/api/admin-users',  // Allow admin users API access for MySaaS
     '/api/mysass'  // Allow MySaaS API access
   ];
 

@@ -133,28 +133,26 @@ const DashboardPage = () => {
       {/* Dashboard Header */}
       <header className="mysass-dashboard-header">
         <div>
-          <h1 style={{ 
-            color: 'var(--mysass-text-primary)', 
-            fontSize: '2rem',
-            fontWeight: '700',
+          <h2 style={{
+            color: 'var(--mysass-text-primary)',
+            fontSize: '26px',
+            fontWeight: '600',
             margin: '0 0 0.5rem 0'
           }}>
             Dashboard
-          </h1>
-          <p style={{ 
-            color: 'var(--mysass-text-secondary)', 
+          </h2>
+          <p style={{
+            color: 'var(--mysass-text-secondary)',
             margin: '0',
             fontSize: '1rem'
           }}>
-            Welcome back, {userData?.name}@{userData?.email}
+            Welcome back, {userData?.email}
           </p>
         </div>
-        <button 
+        <button
           onClick={handleLogout}
-          className="mysass-btn mysass-btn-secondary"
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          className="logoutBtn"
         >
-          <span>🚪</span>
           Logout
         </button>
       </header>
@@ -181,7 +179,7 @@ const DashboardPage = () => {
             <div key={index} className="mysass-management-card">
               <h3>{card.title}</h3>
               <p>{card.description}</p>
-              <Link 
+              <Link
                 to={card.link}
                 className="mysass-btn"
                 style={{
@@ -201,188 +199,47 @@ const DashboardPage = () => {
           ))}
         </div>
 
-        {/* Quick Actions */}
-        <section style={{ marginTop: '4rem' }}>
-          <h2 style={{ 
-            color: 'var(--mysass-text-primary)', 
-            marginBottom: '2rem',
-            fontSize: '1.5rem'
-          }}>
-            Quick Actions
-          </h2>
-          <div className="mysass-grid mysass-grid-4">
-            <Link 
-              to="/mysass/dashboard/team/add" 
-              className="mysass-card"
-              style={{ 
-                textDecoration: 'none', 
-                textAlign: 'center',
-                padding: '2rem',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              <div style={{
-                fontSize: '3rem',
-                marginBottom: '1rem'
-              }}>
-                ➕
-              </div>
-              <h4 style={{ 
-                color: 'var(--mysass-text-primary)', 
-                margin: '0 0 0.5rem 0'
-              }}>
-                Add Team Member
-              </h4>
-              <p style={{ 
-                color: 'var(--mysass-text-secondary)', 
-                margin: '0',
-                fontSize: '0.9rem'
-              }}>
-                Add new team member
-              </p>
-            </Link>
-
-            <Link 
-              to="/mysass/dashboard/products/add" 
-              className="mysass-card"
-              style={{ 
-                textDecoration: 'none', 
-                textAlign: 'center',
-                padding: '2rem',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              <div style={{
-                fontSize: '3rem',
-                marginBottom: '1rem'
-              }}>
-                📦
-              </div>
-              <h4 style={{ 
-                color: 'var(--mysass-text-primary)', 
-                margin: '0 0 0.5rem 0'
-              }}>
-                Add Product
-              </h4>
-              <p style={{ 
-                color: 'var(--mysass-text-secondary)', 
-                margin: '0',
-                fontSize: '0.9rem'
-              }}>
-                Add new product
-              </p>
-            </Link>
-
-            <Link 
-              to="/mysass/dashboard/testimonials/add" 
-              className="mysass-card"
-              style={{ 
-                textDecoration: 'none', 
-                textAlign: 'center',
-                padding: '2rem',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              <div style={{
-                fontSize: '3rem',
-                marginBottom: '1rem'
-              }}>
-                💭
-              </div>
-              <h4 style={{ 
-                color: 'var(--mysass-text-primary)', 
-                margin: '0 0 0.5rem 0'
-              }}>
-                Add Testimonial
-              </h4>
-              <p style={{ 
-                color: 'var(--mysass-text-secondary)', 
-                margin: '0',
-                fontSize: '0.9rem'
-              }}>
-                Add client testimonial
-              </p>
-            </Link>
-
-            <Link 
-              to="/mysass/dashboard/contacts" 
-              className="mysass-card"
-              style={{ 
-                textDecoration: 'none', 
-                textAlign: 'center',
-                padding: '2rem',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              <div style={{
-                fontSize: '3rem',
-                marginBottom: '1rem'
-              }}>
-                📧
-              </div>
-              <h4 style={{ 
-                color: 'var(--mysass-text-primary)', 
-                margin: '0 0 0.5rem 0'
-              }}>
-                View Messages
-              </h4>
-              <p style={{ 
-                color: 'var(--mysass-text-secondary)', 
-                margin: '0',
-                fontSize: '0.9rem'
-              }}>
-                Check contact messages
-              </p>
-            </Link>
-          </div>
-        </section>
 
         {/* Website Preview */}
         <section style={{ marginTop: '4rem' }}>
-          <h2 style={{ 
-            color: 'var(--mysass-text-primary)', 
+          <h2 style={{
+            color: 'var(--mysass-text-primary)',
             marginBottom: '2rem',
             fontSize: '1.5rem'
           }}>
             Website Management
           </h2>
           <div className="mysass-card" style={{ padding: '2rem' }}>
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
               alignItems: 'center',
               flexWrap: 'wrap',
               gap: '1rem'
             }}>
               <div>
-                <h3 style={{ 
-                  color: 'var(--mysass-text-primary)', 
+                <h3 style={{
+                  color: 'var(--mysass-text-primary)',
                   margin: '0 0 0.5rem 0'
                 }}>
                   Harmony Sourcing Website
                 </h3>
-                <p style={{ 
-                  color: 'var(--mysass-text-secondary)', 
+                <p style={{
+                  color: 'var(--mysass-text-secondary)',
                   margin: '0'
                 }}>
                   Manage your website content, pages, and settings
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                <a 
-                  href="/mysass" 
+                <a
+                  href="/mysass"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mysass-btn mysass-btn-secondary"
                 >
                   View Website 🔗
                 </a>
-                <Link 
-                  to="/mysass/dashboard/settings" 
-                  className="mysass-btn mysass-btn-primary"
-                >
-                  Website Settings
-                </Link>
               </div>
             </div>
           </div>

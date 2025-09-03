@@ -75,11 +75,7 @@ const AboutPage = () => {
           padding: '4rem 3rem',
           background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05))'
         }}>
-          <h2 style={{ 
-            fontSize: '2.5rem', 
-            marginBottom: '2rem',
-            color: 'var(--mysass-text-primary)'
-          }}>
+          <h2 className="mysass-section-title">
             Our Mission
           </h2>
           <p style={{ 
@@ -97,7 +93,7 @@ const AboutPage = () => {
       <section className="mysass-section">
         <div className="mysass-grid mysass-grid-2" style={{ alignItems: 'center', gap: '4rem' }}>
           <div>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '2rem', color: 'var(--mysass-primary)' }}>
+            <h2 className="mysass-section-title" style={{ color: 'var(--mysass-primary)' }}>
               Our Story: Seasoned Professionals, Fresh Vision
             </h2>
             <div style={{ color: 'var(--mysass-text-secondary)', fontSize: '1.1rem', lineHeight: '1.7' }}>
@@ -342,11 +338,7 @@ const AboutPage = () => {
           maxWidth: '800px',
           margin: '0 auto'
         }}>
-          <h2 style={{ 
-            fontSize: '2.5rem', 
-            marginBottom: '1.5rem',
-            color: 'var(--mysass-text-primary)'
-          }}>
+          <h2 className="mysass-section-title">
             Join Our Sustainability Journey
           </h2>
           <p style={{ 

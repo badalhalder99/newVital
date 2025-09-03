@@ -1,4 +1,36 @@
 /* MySaaS - Harmony Sourcing Custom Styles */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  width: 6px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #8CA19F;
+  border-radius: 3px;
+}
 
 /* Color Palette inspired by the design */
 :root {
@@ -48,6 +80,7 @@ body {
   justify-content: space-between;
   padding: 1rem 2rem;
 }
+
 
 .mysass-logo {
   display: flex;
@@ -116,8 +149,8 @@ body {
 }
 
 .mysass-hero h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 700;
+  font-size: 46px;
+  font-weight: 600;
   line-height: 1.1;
   margin-bottom: 1.5rem;
   background: linear-gradient(135deg, var(--mysass-text-primary) 0%, var(--mysass-primary) 100%);
@@ -190,8 +223,8 @@ body {
 }
 
 .mysass-section-title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 700;
+  font-size: 36px;
+  font-weight: 600;
   text-align: center;
   margin-bottom: 3rem;
   color: var(--mysass-text-primary);
@@ -368,6 +401,8 @@ body {
 .mysass-dashboard {
   min-height: 100vh;
   background: var(--mysass-background);
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 .mysass-dashboard-header {
@@ -375,8 +410,8 @@ body {
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 100px;
   align-items: center;
 }
 
@@ -385,7 +420,17 @@ body {
   max-width: 1400px;
   margin: 0 auto;
 }
-
+.logoutBtn {
+  padding: 9px 20px;
+  border-radius: 38px;
+  font-size: 15px;
+  border: 0;
+  cursor: pointer;
+  transition: all .5s ease;
+}
+.logoutBtn:hover {
+  transform: translate(0px, -3px);
+}
 .mysass-dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -465,7 +510,7 @@ body {
 .mysass-management-card h3 {
   color: var(--mysass-text-primary);
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 1rem;
 }
 
@@ -478,40 +523,40 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
   .mysass-nav {
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
     padding: 1rem;
   }
-  
+
   .mysass-nav-links {
     gap: 1rem;
   }
-  
+
   .mysass-hero {
     padding: 80px 1rem;
     text-align: center;
   }
-  
+
   .mysass-section {
     padding: 60px 1rem;
   }
-  
+
   .mysass-cta-group {
     justify-content: center;
   }
-  
+
   .mysass-stats {
     gap: 1rem;
   }
-  
+
   .mysass-dashboard-content {
     padding: 1rem;
   }
-  
+
   .mysass-dashboard-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .mysass-management-grid {
     grid-template-columns: 1fr;
   }
@@ -522,12 +567,12 @@ body {
     width: 100%;
     justify-content: center;
   }
-  
+
   .mysass-metric-card {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .mysass-footer-content {
     grid-template-columns: 1fr;
   }
@@ -600,43 +645,43 @@ body {
     padding: 1rem 0.75rem !important;
     gap: 1rem !important;
   }
-  
+
   .mysass-categories-header > div:first-child {
     gap: 0.5rem !important;
   }
-  
+
   .mysass-categories-header h1 {
     font-size: 1.25rem !important;
   }
-  
+
   .mysass-categories-header p {
     font-size: 0.8rem !important;
   }
-  
+
   .mysass-categories-header button {
     width: 100% !important;
     justify-content: center !important;
     padding: 12px 16px !important;
   }
-  
+
   .mysass-categories-grid {
     grid-template-columns: 1fr !important;
     padding: 0.75rem !important;
     gap: 1rem !important;
   }
-  
+
   .mysass-category-card {
     padding: 1rem !important;
   }
-  
+
   .mysass-category-card h3 {
     font-size: 1.1rem !important;
   }
-  
+
   .mysass-category-card p {
     font-size: 0.85rem !important;
   }
-  
+
   /* Team Management Mobile */
   .mysass-team-header {
     flex-direction: column !important;
@@ -644,12 +689,12 @@ body {
     align-items: flex-start !important;
     padding: 1rem 0.75rem !important;
   }
-  
+
   .mysass-team-grid {
     grid-template-columns: 1fr !important;
     padding: 0.75rem !important;
   }
-  
+
   .mysass-team-card {
     padding: 1rem !important;
   }
@@ -659,15 +704,15 @@ body {
   .mysass-categories-header {
     padding: 0.75rem 0.5rem !important;
   }
-  
+
   .mysass-categories-header h1 {
     font-size: 1.1rem !important;
   }
-  
+
   .add-category-text {
     display: none !important;
   }
-  
+
   .mysass-categories-header button {
     min-width: 44px !important;
     padding: 10px !important;
@@ -675,29 +720,29 @@ body {
     aspect-ratio: 1;
     width: auto !important;
   }
-  
+
   .mysass-categories-grid {
     padding: 0.5rem !important;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
   }
-  
+
   .mysass-category-card {
     padding: 0.75rem !important;
   }
-  
+
   /* Navigation */
   .mysass-nav {
     padding: 0.75rem 1rem !important;
   }
-  
+
   .mysass-logo {
     font-size: 1.1rem !important;
   }
-  
+
   .mysass-nav-links {
     gap: 1rem !important;
   }
-  
+
   .mysass-nav-links a {
     font-size: 0.9rem !important;
   }
@@ -707,15 +752,15 @@ body {
   .mysass-categories-grid {
     grid-template-columns: 1fr !important;
   }
-  
+
   .mysass-nav {
     padding: 0.5rem 0.75rem !important;
   }
-  
+
   .mysass-logo {
     font-size: 1rem !important;
   }
-  
+
   .mysass-nav-links a {
     font-size: 0.85rem !important;
   }
@@ -726,33 +771,33 @@ body {
   .mysass-modal-backdrop {
     padding: 0.5rem !important;
   }
-  
+
   .mysass-modal {
     padding: 1rem !important;
     border-radius: 8px !important;
   }
-  
+
   .mysass-modal h2 {
     font-size: 1.1rem !important;
     margin: 0 0 1rem 0 !important;
   }
-  
+
   .mysass-modal input,
   .mysass-modal textarea {
     padding: 10px 12px !important;
     font-size: 0.9rem !important;
   }
-  
+
   .mysass-modal button {
     padding: 10px 16px !important;
     font-size: 0.9rem !important;
   }
-  
+
   .mysass-modal > form > div:last-child {
     flex-direction: column !important;
     gap: 0.75rem !important;
   }
-  
+
   .mysass-modal > form > div:last-child button {
     width: 100% !important;
   }
@@ -762,12 +807,12 @@ body {
   .mysass-modal-backdrop {
     padding: 0.25rem !important;
   }
-  
+
   .mysass-modal {
     padding: 0.75rem !important;
     max-height: 95vh !important;
   }
-  
+
   .mysass-modal h2 {
     font-size: 1rem !important;
   }
@@ -778,27 +823,27 @@ body {
   .mysass-dashboard-header {
     padding: 1rem 0.75rem !important;
   }
-  
+
   .mysass-dashboard-header h1 {
     font-size: 1.5rem !important;
   }
-  
+
   .mysass-metrics-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
     gap: 1rem !important;
     padding: 0.75rem !important;
   }
-  
+
   .mysass-management-grid {
     grid-template-columns: 1fr !important;
     gap: 1rem !important;
     padding: 0.75rem !important;
   }
-  
+
   .mysass-metric-card {
     padding: 1rem !important;
   }
-  
+
   .mysass-management-card {
     padding: 1rem !important;
   }
@@ -808,28 +853,28 @@ body {
   .mysass-dashboard-header {
     padding: 0.75rem 0.5rem !important;
   }
-  
+
   .mysass-dashboard-header h1 {
     font-size: 1.25rem !important;
   }
-  
+
   .mysass-metrics-grid {
     padding: 0.5rem !important;
     grid-template-columns: 1fr !important;
   }
-  
+
   .mysass-management-grid {
     padding: 0.5rem !important;
   }
-  
+
   .mysass-metric-card {
     padding: 0.75rem !important;
   }
-  
+
   .mysass-management-card {
     padding: 0.75rem !important;
   }
-  
+
   .mysass-metric-content h3 {
     font-size: 1.5rem !important;
   }
@@ -843,17 +888,17 @@ body {
     padding: 1rem 0.75rem !important;
     gap: 1rem !important;
   }
-  
+
   .mysass-team-grid {
     grid-template-columns: 1fr !important;
     padding: 0.75rem !important;
     gap: 1rem !important;
   }
-  
+
   .mysass-team-card {
     padding: 1rem !important;
   }
-  
+
   .add-member-text {
     display: none !important;
   }
@@ -863,19 +908,19 @@ body {
   .mysass-team-header {
     padding: 0.75rem 0.5rem !important;
   }
-  
+
   .mysass-team-grid {
     padding: 0.5rem !important;
   }
-  
+
   .mysass-team-card {
     padding: 0.75rem !important;
   }
-  
+
   .mysass-team-card h3 {
     font-size: 1rem !important;
   }
-  
+
   .mysass-team-card p {
     font-size: 0.8rem !important;
   }
@@ -885,12 +930,1850 @@ body {
   .mysass-team-header {
     padding: 0.5rem !important;
   }
-  
+
   .mysass-team-grid {
     padding: 0.25rem !important;
   }
-  
+
   .mysass-team-card {
     padding: 0.5rem !important;
   }
 }
+
+/* Client Management Styles - Dark Theme */
+.mysass-clients-container {
+  background: #3e4651;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.mysass-clients-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.mysass-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mysass-back-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.mysass-back-btn:hover {
+  color: #ffffff;
+}
+
+.mysass-header-text h2 {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mysass-header-text p {
+  margin: 0.25rem 0 0 0;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.mysass-add-client-btn {
+  background: #f97316;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mysass-add-client-btn:hover {
+  background: #ea580c;
+}
+
+.mysass-clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.mysass-client-card {
+  background: #4b5563;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+  border: 1px solid #6b7280;
+}
+
+.mysass-client-card:hover {
+  background: #52616f;
+}
+
+.mysass-client-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+}
+
+.mysass-client-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #6b7280;
+}
+
+.mysass-client-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mysass-client-logo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 1.5rem;
+}
+
+.mysass-client-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mysass-client-info h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.4;
+}
+
+.mysass-client-order {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.mysass-client-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mysass-edit-btn,
+.mysass-delete-btn {
+  background: none;
+  border: none;
+  padding: 0.375rem;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mysass-edit-btn i,
+.mysass-delete-btn i {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.mysass-edit-btn {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.375rem;
+}
+
+.mysass-edit-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.mysass-delete-btn {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 0.375rem;
+}
+
+.mysass-delete-btn:hover {
+  color: #dc2626;
+  background: rgba(239, 68, 68, 0.2);
+  transform: scale(1.05);
+}
+
+.mysass-client-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.mysass-client-date {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.mysass-client-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  text-transform: capitalize;
+}
+
+.mysass-client-status.active {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.mysass-client-status.inactive {
+  background-color: rgba(248, 113, 113, 0.2);
+  color: #f87171;
+}
+
+/* Add Client Modal Styles - Dark Theme */
+.mysass-add-client-modal {
+  width: 500px;
+  max-width: 90vw;
+  background: #4b5563;
+  border-radius: 0.75rem;
+}
+
+.mysass-modal-header {
+  padding: 1.5rem 1.5rem 16px 1.5rem;
+  border-bottom: 1px solid #6b7280;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.mysass-modal-header h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.mysass-modal-close {
+  color: #9ca3af;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.mysass-modal-close:hover {
+  color: #ffffff;
+}
+
+.mysass-client-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.mysass-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mysass-form-group label {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.mysass-form-group input,
+.mysass-form-group select {
+  background: #6b7280;
+  border: 1px solid #6b7280;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: #ffffff;
+  font-size: 1rem;
+  width: 100% !important;
+}
+
+.mysass-form-group input::placeholder {
+  color: #9ca3af;
+}
+
+.mysass-form-group input:focus,
+.mysass-form-group select:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+.mysass-logo-upload {
+  position: relative;
+}
+
+.mysass-file-input {
+  display: none;
+}
+
+.mysass-file-label {
+  display: block;
+  cursor: pointer;
+  background: #6b7280;
+  border: 1px solid #6b7280;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mysass-file-label:hover {
+  background: #52616f;
+}
+
+.mysass-logo-preview {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mysass-logo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mysass-logo-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #9ca3af;
+}
+
+.mysass-logo-placeholder .file-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.mysass-logo-placeholder .file-btn {
+  background: #4b5563;
+  color: #ffffff;
+  border: 1px solid #6b7280;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.mysass-logo-placeholder .file-status {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.mysass-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.mysass-btn-cancel {
+  background: #6b7280;
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mysass-btn-cancel:hover {
+  background: #52616f;
+}
+
+.mysass-btn-primary {
+  background: #f97316;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mysass-btn-primary:hover {
+  background: #ea580c;
+}
+
+.mysass-btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Modal Overlay */
+.mysass-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.mysass-modal-content {
+  background: #4b5563;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Empty State */
+.mysass-empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+.mysass-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  color: #6b7280;
+}
+
+.mysass-empty-state h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.mysass-empty-state p {
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.mysass-add-btn-empty {
+  background: #f97316;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mysass-add-btn-empty:hover {
+  background: #ea580c;
+}
+
+/* Certificate Management Styles - Dark Theme */
+.mysass-certificates-container {
+  background: #3e4651;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.mysass-certificates-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.mysass-add-certificate-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mysass-add-certificate-btn:hover {
+  background: #dc2626;
+}
+
+.mysass-certificates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.mysass-certificate-card {
+  background: #4b5563;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+  border: 1px solid #6b7280;
+}
+
+.mysass-certificate-card:hover {
+  background: #52616f;
+}
+
+.mysass-certificate-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+}
+
+.mysass-certificate-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #6b7280;
+}
+
+.mysass-certificate-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mysass-certificate-logo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 1.5rem;
+}
+
+.mysass-certificate-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mysass-certificate-info h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.4;
+}
+
+.mysass-certificate-order {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.mysass-certificate-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mysass-certificate-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.mysass-certificate-date {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.mysass-certificate-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  text-transform: capitalize;
+}
+
+.mysass-certificate-status.active {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.mysass-certificate-status.inactive {
+  background-color: rgba(248, 113, 113, 0.2);
+  color: #f87171;
+}
+
+/* Add Certificate Modal Styles - Dark Theme */
+.mysass-add-certificate-modal {
+  width: 500px;
+  max-width: 90vw;
+  background: #4b5563;
+  border-radius: 0.75rem;
+}
+
+.mysass-certificate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.mysass-btn-certificate-primary {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mysass-btn-certificate-primary:hover {
+  background: #dc2626;
+}
+
+.mysass-btn-certificate-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.mysass-error-text {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.mysass-error-message {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Certificate Management Responsive Styles */
+@media (max-width: 768px) {
+  .mysass-certificates-container {
+    padding: 1rem;
+  }
+
+  .mysass-certificates-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .mysass-header-left {
+    justify-content: flex-start;
+  }
+
+  .mysass-add-certificate-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .mysass-certificates-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mysass-certificate-card {
+    padding: 1rem;
+  }
+
+  .mysass-certificate-header {
+    align-items: center;
+  }
+
+  .mysass-certificate-logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .mysass-add-certificate-modal {
+    width: 95vw;
+    margin: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mysass-certificates-container {
+    padding: 0.75rem;
+  }
+
+  .mysass-certificate-card {
+    padding: 0.75rem;
+  }
+
+  .mysass-certificate-header {
+    gap: 0.75rem;
+  }
+
+  .mysass-certificate-logo {
+    width: 45px;
+    height: 45px;
+  }
+
+  .mysass-certificate-info h3 {
+    font-size: 1rem;
+  }
+
+  .mysass-certificate-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .mysass-modal-content {
+    margin: 0.5rem;
+  }
+}
+
+/* Testimonials Management Styles - Dark Theme */
+.mysass-testimonials-container {
+  background: #3e4651;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.mysass-testimonials-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.mysass-add-testimonial-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mysass-add-testimonial-btn:hover {
+  background: #2563eb;
+}
+
+.mysass-testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.mysass-testimonial-card {
+  background: #4b5563;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+  border: 1px solid #6b7280;
+}
+
+.mysass-testimonial-card:hover {
+  background: #52616f;
+}
+
+.mysass-testimonial-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.mysass-testimonial-profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.mysass-testimonial-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #6b7280;
+}
+
+.mysass-testimonial-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mysass-testimonial-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 1.5rem;
+}
+
+.mysass-testimonial-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mysass-testimonial-info h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.4;
+}
+
+.mysass-testimonial-company {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.mysass-testimonial-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mysass-testimonial-rating {
+  margin-bottom: 1rem;
+}
+
+.star-rating {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.star-rating .star {
+  font-size: 1rem;
+  color: #fbbf24;
+}
+
+.star-rating .star.empty {
+  color: #6b7280;
+}
+
+.mysass-testimonial-quote {
+  margin-bottom: 1rem;
+}
+
+.mysass-testimonial-quote p {
+  margin: 0;
+  color: #e5e7eb;
+  font-style: italic;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.mysass-testimonial-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.mysass-testimonial-date {
+  color: #9ca3af;
+}
+
+.mysass-testimonial-order {
+  color: #9ca3af;
+}
+
+/* Add Testimonial Modal Styles - Dark Theme */
+.mysass-add-testimonial-modal {
+  width: 600px;
+  max-width: 90vw;
+  background: #4b5563;
+  border-radius: 0.75rem;
+}
+
+.mysass-testimonial-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.mysass-form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.mysass-form-group textarea {
+  background: #6b7280;
+  border: 1px solid #6b7280;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: #ffffff;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+}
+
+.mysass-form-group textarea::placeholder {
+  color: #9ca3af;
+}
+
+.mysass-form-group textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.mysass-profile-upload {
+  position: relative;
+}
+
+.mysass-profile-preview {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mysass-profile-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mysass-profile-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #9ca3af;
+}
+
+.mysass-btn-testimonial-primary {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mysass-btn-testimonial-primary:hover {
+  background: #2563eb;
+}
+
+.mysass-btn-testimonial-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Testimonials Management Responsive Styles */
+@media (max-width: 768px) {
+  .mysass-testimonials-container {
+    padding: 1rem;
+  }
+
+  .mysass-testimonials-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .mysass-add-testimonial-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .mysass-testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mysass-testimonial-card {
+    padding: 1rem;
+  }
+
+  .mysass-testimonial-header {
+    align-items: center;
+  }
+
+  .mysass-testimonial-avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .mysass-add-testimonial-modal {
+    width: 95vw;
+    margin: 1rem;
+  }
+
+  .mysass-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .mysass-testimonials-container {
+    padding: 0.75rem;
+  }
+
+  .mysass-testimonial-card {
+    padding: 0.75rem;
+  }
+
+  .mysass-testimonial-header {
+    gap: 0.75rem;
+  }
+
+  .mysass-testimonial-avatar {
+    width: 45px;
+    height: 45px;
+  }
+
+  .mysass-testimonial-info h3 {
+    font-size: 1rem;
+  }
+
+  .mysass-testimonial-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .mysass-modal-content {
+    margin: 0.5rem;
+  }
+
+  .mysass-profile-preview {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* Loading Spinner */
+.mysass-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+.mysass-spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid #6b7280;
+  border-top: 2px solid #f97316;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.mysass-loading p {
+  margin: 0;
+  color: #9ca3af;
+}
+
+/* Client Management Responsive Styles */
+@media (max-width: 768px) {
+  .mysass-clients-container {
+    padding: 1rem;
+  }
+
+  .mysass-clients-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .mysass-header-left {
+    justify-content: flex-start;
+  }
+
+  .mysass-add-client-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .mysass-clients-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mysass-client-card {
+    padding: 1rem;
+  }
+
+  .mysass-client-header {
+    align-items: center;
+  }
+
+  .mysass-client-logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .mysass-add-client-modal {
+    width: 95vw;
+    margin: 1rem;
+  }
+
+  .mysass-logo-preview {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mysass-clients-container {
+    padding: 0.75rem;
+  }
+
+  .mysass-client-card {
+    padding: 0.75rem;
+  }
+
+  .mysass-client-header {
+    gap: 0.75rem;
+  }
+
+  .mysass-client-logo {
+    width: 45px;
+    height: 45px;
+  }
+
+  .mysass-client-info h3 {
+    font-size: 1rem;
+  }
+
+  .mysass-client-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .mysass-modal-content {
+    margin: 0.5rem;
+  }
+
+  .mysass-logo-preview {
+    width: 80px;
+    height: 80px;
+  }
+  .mysass-modal-header {
+    padding-bottom: 12px;
+  }
+  .mysass-modal-header h2 {
+    font-size: 1rem;
+  }
+}
+
+/* User Management Styles - Dark Theme */
+.mysass-users-container {
+  background: #3e4651;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.mysass-users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.mysass-add-user-btn {
+  background: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mysass-add-user-btn:hover {
+  background: #4b5563;
+}
+
+.mysass-users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.mysass-user-card {
+  background: #4b5563;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+  border: 1px solid #6b7280;
+}
+
+.mysass-user-card:hover {
+  background: #52616f;
+}
+
+.mysass-user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.mysass-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mysass-user-info h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.4;
+}
+
+.mysass-user-role {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  text-transform: capitalize;
+}
+
+.mysass-user-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.mysass-user-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.mysass-user-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mysass-user-date {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.mysass-user-status-container {
+  display: flex;
+  align-items: center;
+}
+
+.mysass-user-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.mysass-user-status.active {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.mysass-user-status.active::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #22c55e;
+}
+
+.mysass-user-status.inactive {
+  background-color: rgba(248, 113, 113, 0.2);
+  color: #f87171;
+}
+
+.mysass-user-status.inactive::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #f87171;
+}
+
+/* Add User Modal Styles - Dark Theme */
+.mysass-add-user-modal {
+  width: 500px;
+  max-width: 90vw;
+  background: #4b5563;
+  border-radius: 0.75rem;
+}
+
+.mysass-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.mysass-btn-user-primary {
+  background: #6b7280;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mysass-btn-user-primary:hover {
+  background: #4b5563;
+}
+
+.mysass-btn-user-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* User Management Responsive Styles */
+@media (max-width: 768px) {
+  .mysass-users-container {
+    padding: 1rem;
+  }
+
+  .mysass-users-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .mysass-add-user-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .mysass-users-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mysass-user-card {
+    padding: 1rem;
+  }
+
+  .mysass-add-user-modal {
+    width: 95vw;
+    margin: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mysass-users-container {
+    padding: 0.75rem;
+  }
+
+  .mysass-user-card {
+    padding: 0.75rem;
+  }
+
+  .mysass-user-header {
+    align-items: center;
+  }
+
+  .mysass-user-info h3 {
+    font-size: 1rem;
+  }
+
+  .mysass-user-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .mysass-modal-content {
+    margin: 0.5rem;
+  }
+}
+
+/* Password Input Container */
+.mysass-password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mysass-password-input-container input {
+  flex: 1;
+  padding-right: 45px;
+}
+
+.mysass-password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: color 0.2s ease;
+}
+
+.mysass-password-toggle:hover {
+  color: #fff;
+}
+
+.mysass-password-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mysass-password-toggle i {
+  font-size: 16px;
+}
+
+/* Contact Management Styles */
+.mysass-contacts-container {
+  padding: 2rem;
+  background: var(--mysass-background);
+  min-height: 100vh;
+}
+
+.mysass-contacts-header {
+  margin-bottom: 2rem;
+}
+
+/* Contact Stats Cards */
+.mysass-contacts-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.mysass-stat-card {
+  background: var(--mysass-surface);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.mysass-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.mysass-stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.mysass-stat-icon.blue {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.mysass-stat-icon.cyan {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.mysass-stat-icon.orange {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.mysass-stat-icon.green {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.mysass-stat-info h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--mysass-text-primary);
+  margin: 0;
+}
+
+.mysass-stat-info p {
+  color: var(--mysass-text-secondary);
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Search and Filter Section */
+.mysass-contacts-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.mysass-search-container {
+  position: relative;
+  flex: 1;
+  min-width: 300px;
+}
+
+.mysass-search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  background: var(--mysass-surface);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: var(--mysass-text-primary);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.mysass-search-input::placeholder {
+  color: var(--mysass-text-muted);
+}
+
+.mysass-search-input:focus {
+  outline: none;
+  border-color: var(--mysass-primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.mysass-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--mysass-text-muted);
+  font-size: 0.875rem;
+}
+
+.mysass-filter-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mysass-filter-icon {
+  color: var(--mysass-text-muted);
+  font-size: 0.875rem;
+}
+
+.mysass-status-filter {
+  padding: 0.75rem 1rem;
+  background: var(--mysass-surface);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: var(--mysass-text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mysass-status-filter:focus {
+  outline: none;
+  border-color: var(--mysass-primary);
+}
+
+/* Contact List */
+.mysass-contacts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mysass-contact-card {
+  background: var(--mysass-surface);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.mysass-contact-card:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  transform: translateY(-1px);
+}
+
+.mysass-contact-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.mysass-contact-name-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.mysass-contact-info h3 {
+  color: var(--mysass-text-primary);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.mysass-contact-email {
+  color: var(--mysass-text-secondary);
+  font-size: 0.875rem;
+  margin: 0 0 0.25rem 0;
+}
+
+.mysass-contact-company {
+  color: var(--mysass-text-muted);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.mysass-contact-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.mysass-contact-status.status-new {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+}
+
+.mysass-contact-status.status-read {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+}
+
+.mysass-contact-status.status-replied {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+}
+
+.mysass-contact-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mysass-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: var(--mysass-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mysass-action-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--mysass-text-primary);
+}
+
+.mysass-action-btn.reply:hover {
+  border-color: var(--mysass-primary);
+  color: var(--mysass-primary);
+}
+
+.mysass-action-btn.mark-read:hover {
+  border-color: var(--mysass-accent-orange);
+  color: var(--mysass-accent-orange);
+}
+
+.mysass-action-btn.delete:hover {
+  border-color: var(--mysass-accent-red);
+  color: var(--mysass-accent-red);
+}
+
+.mysass-contact-details {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.mysass-contact-subject {
+  color: var(--mysass-text-primary);
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.mysass-contact-message {
+  color: var(--mysass-text-secondary);
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.mysass-contact-message p {
+  margin: 0.5rem 0 0 0;
+  line-height: 1.5;
+  color: var(--mysass-text-muted);
+}
+
+.mysass-contact-meta {
+  display: flex;
+  gap: 1.5rem;
+  color: var(--mysass-text-muted);
+  font-size: 0.75rem;
+}
+
+.mysass-contact-phone,
+.mysass-contact-date {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+.mysassProductItemWrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mysass-contacts-container {
+    padding: 1rem;
+  }
+
+  .mysass-contacts-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mysass-search-container {
+    min-width: unset;
+  }
+
+  .mysass-contact-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .mysass-contact-actions {
+    align-self: flex-end;
+  }
+
+  .mysass-contact-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .mysass-header-text h2 {
+    font-size:17px;
+    font-weight: 600;
+  }
+  .mysassProductItemWrap {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mysass-section-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+  body p {
+    font-size: 14px !important;
+  }
+}
+
+
+
+
+

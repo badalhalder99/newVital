@@ -446,7 +446,7 @@ const ProductsPage = () => {
           background: 'linear-gradient(135deg, var(--mysass-primary), var(--mysass-secondary))',
           color: 'white'
         }}>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', color: 'white' }}>
+          <h2 className="mysass-section-title" style={{ color: 'white' }}>
             Ready to Start Your Next Product?
           </h2>
           <p style={{ 

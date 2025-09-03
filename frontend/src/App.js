@@ -23,6 +23,11 @@ import MySaaSDashboardPage from './components/mysass/DashboardPage';
 import MySaaSTeamManagement from './components/mysass/TeamManagement';
 import MySaaSProductCategoriesManagement from './components/mysass/ProductCategoriesManagement';
 import MySaaSProductsManagement from './components/mysass/ProductsManagement';
+import MySaaSClientsManagement from './components/mysass/ClientsManagement';
+import MySaaSCertificatesManagement from './components/mysass/CertificatesManagement';
+import MySaaSTestimonialsManagement from './components/mysass/TestimonialsManagement';
+import MySaaSUsersManagement from './components/mysass/UsersManagement';
+import MySaaSContactsManagement from './components/mysass/ContactsManagement';
 import ScrollToTop from './components/ScrollToTop';
 import { useHeatmapTracking } from './hooks/useHeatmapTracking';
 import screenshotService from './services/screenshotService';
@@ -155,6 +160,26 @@ function AppContent() {
           <Route 
             path="/mysass/dashboard/products" 
             element={<MySaaSProductsManagement />} 
+          />
+          <Route 
+            path="/mysass/dashboard/clients" 
+            element={<MySaaSClientsManagement />} 
+          />
+          <Route 
+            path="/mysass/dashboard/certificates" 
+            element={<MySaaSCertificatesManagement />} 
+          />
+          <Route 
+            path="/mysass/dashboard/testimonials" 
+            element={<MySaaSTestimonialsManagement />} 
+          />
+          <Route 
+            path="/mysass/dashboard/users" 
+            element={<MySaaSUsersManagement />} 
+          />
+          <Route 
+            path="/mysass/dashboard/contacts" 
+            element={<MySaaSContactsManagement />} 
           />
 
           {/* Tenant Website Routes */}

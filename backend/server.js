@@ -18,6 +18,10 @@ const mysassRoutes = require('./routes/mysass');
 const teamMembersRoutes = require('./routes/teamMembers');
 const productCategoriesRoutes = require('./routes/productCategories');
 const productsRoutes = require('./routes/products');
+const clientsRoutes = require('./routes/clients');
+const certificatesRoutes = require('./routes/certificates');
+const testimonialsRoutes = require('./routes/testimonials');
+const adminUsersRoutes = require('./routes/admin-users');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -73,6 +77,10 @@ app.use('/api/mysass', mysassRoutes);
 app.use('/api/team-members', teamMembersRoutes);
 app.use('/api/product-categories', productCategoriesRoutes);
 app.use('/api/products', productsRoutes);
+app.use('/api/clients', clientsRoutes);
+app.use('/api/certificates', certificatesRoutes);
+app.use('/api/testimonials', testimonialsRoutes);
+app.use('/api/admin-users', adminUsersRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
