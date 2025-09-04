@@ -20,13 +20,13 @@ router.get('/:tenantName', async (req, res) => {
     }
 
     // Get tenant settings
-    const settings = await TenantSettings.findOne(tenant.subdomain);
+    const settings = await TenantSettings.findOne(tenant._id);
     
     // Get home page content
-    const homePage = await TenantPage.findByPageType(tenant.subdomain, 'home');
+    const homePage = await TenantPage.findByPageType(tenant._id, 'home');
 
     // Get testimonials
-    const testimonials = await TenantTestimonial.findAll(tenant.subdomain, { limit: 10 });
+    const testimonials = await TenantTestimonial.findAll(tenant._id, { limit: 10 });
 
     res.json({
       success: true,
@@ -64,15 +64,15 @@ router.get('/:tenantName/:pageType', async (req, res) => {
     }
 
     // Get tenant settings
-    const settings = await TenantSettings.findOne(tenant.subdomain);
+    const settings = await TenantSettings.findOne(tenant._id);
     
     // Get specific page content
-    const page = await TenantPage.findByPageType(tenant.subdomain, pageType);
+    const page = await TenantPage.findByPageType(tenant._id, pageType);
 
     // For testimonial page, also get testimonials
     let testimonials = [];
     if (pageType === 'testimonials') {
-      testimonials = await TenantTestimonial.findAll(tenant.subdomain);
+      testimonials = await TenantTestimonial.findAll(tenant._id);
     }
 
     res.json({
@@ -125,7 +125,7 @@ router.get('/:tenantName/dashboard/pages', authenticateToken, async (req, res) =
       });
     }
 
-    const pages = await TenantPage.findAll(tenant.subdomain);
+    const pages = await TenantPage.findAll(tenant._id);
     
     res.json({
       success: true,
@@ -168,12 +168,12 @@ router.put('/:tenantName/dashboard/pages/:pageType', authenticateToken, async (r
     }
 
     // Find existing page or create new one
-    let page = await TenantPage.findByPageType(tenant.subdomain, pageType);
+    let page = await TenantPage.findByPageType(tenant._id, pageType);
     
     if (page) {
       // Update existing page
       const tenantPage = TenantPage.fromDocument(page);
-      await tenantPage.update(tenant.subdomain, {
+      await tenantPage.update(tenant._id, {
         title,
         content,
         meta_description
@@ -186,7 +186,7 @@ router.put('/:tenantName/dashboard/pages/:pageType', authenticateToken, async (r
         content,
         meta_description
       });
-      await newPage.save(tenant.subdomain);
+      await newPage.save(tenant._id);
     }
 
     res.json({
@@ -230,16 +230,16 @@ router.put('/:tenantName/dashboard/settings', authenticateToken, async (req, res
     }
 
     // Find existing settings or create new ones
-    let settings = await TenantSettings.findOne(tenant.subdomain);
+    let settings = await TenantSettings.findOne(tenant._id);
     
     if (settings) {
       // Update existing settings
       const tenantSettings = TenantSettings.fromDocument(settings);
-      await tenantSettings.update(tenant.subdomain, settingsData);
+      await tenantSettings.update(tenant._id, settingsData);
     } else {
       // Create new settings
       const newSettings = new TenantSettings(settingsData);
-      await newSettings.save(tenant.subdomain);
+      await newSettings.save(tenant._id);
     }
 
     res.json({

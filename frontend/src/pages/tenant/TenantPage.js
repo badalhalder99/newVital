@@ -4,13 +4,35 @@ import TenantLayout from '../../components/tenant/TenantLayout';
 import api from '../../services/api';
 
 const TenantPage = ({ pageType = 'home' }) => {
-  const { tenantName } = useParams();
+  const { tenantName: urlTenantName } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [tenantData, setTenantData] = useState(null);
   const [settings, setSettings] = useState(null);
   const [pageContent, setPageContent] = useState(null);
   const [testimonials, setTestimonials] = useState([]);
+
+  // Helper function to get tenant name from subdomain or URL params
+  const getTenantName = () => {
+    // Check if we're on a subdomain first
+    const host = window.location.hostname;
+    if (host.includes('localhost')) {
+      const subdomainMatch = host.match(/^([^.]+)\.localhost$/);
+      if (subdomainMatch && subdomainMatch[1] !== 'www') {
+        return subdomainMatch[1];
+      }
+    } else {
+      const parts = host.split('.');
+      if (parts.length > 2 && parts[0] !== 'www') {
+        return parts[0];
+      }
+    }
+    
+    // Fallback to URL params (for path-based routing)
+    return urlTenantName;
+  };
+
+  const tenantName = getTenantName();
 
   useEffect(() => {
     const fetchTenantData = async () => {

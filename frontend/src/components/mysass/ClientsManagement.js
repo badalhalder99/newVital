@@ -14,7 +14,7 @@ const ClientsManagement = () => {
   const fetchClients = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3010/api/clients?tenant=mysass');
+      const response = await fetch('http://localhost:3005/api/clients?tenant=mysass');
       if (!response.ok) {
         throw new Error('Failed to fetch clients');
       }
@@ -53,7 +53,7 @@ const ClientsManagement = () => {
       const originalClients = [...clients];
       setClients(clients.filter(client => client._id !== id));
       
-      const response = await fetch(`http://localhost:3010/api/clients/${id}?tenant=mysass`, {
+      const response = await fetch(`http://localhost:3005/api/clients/${id}?tenant=mysass`, {
         method: 'DELETE'
       });
       

@@ -36,20 +36,44 @@ import { useHeatmapTracking } from './hooks/useHeatmapTracking';
 import screenshotService from './services/screenshotService';
 import './App.css';
 
+// Helper function to determine if current host is a subdomain
+function getSubdomain() {
+  const host = window.location.hostname;
+  const parts = host.split('.');
+  
+  // For localhost development, check if subdomain exists
+  if (host.includes('localhost')) {
+    const subdomainMatch = host.match(/^([^.]+)\.localhost$/);
+    return subdomainMatch ? subdomainMatch[1] : null;
+  }
+  
+  // For production domains
+  if (parts.length > 2) {
+    return parts[0];
+  }
+  
+  return null;
+}
+
 function AppContent() {
   const location = useLocation();
-  const isDashboard = location.pathname.includes('/dashboard') || location.pathname.includes('/admin') || location.pathname.includes('/tenant');
-  const isMySaaS = location.pathname.startsWith('/mysass');
-  const isTenantSite = location.pathname.match(/^\/[^/]+$/) || location.pathname.match(/^\/[^/]+\/(about|services|testimonials|contact)$/);
+  const subdomain = getSubdomain();
+  const isSubdomainSite = !!subdomain && subdomain !== 'www';
   
-  // Only show global header/footer for main public pages
-  const isGlobalSite = location.pathname === '/' || 
-                       location.pathname === '/about' || 
-                       location.pathname === '/services' || 
-                       location.pathname === '/contact' || 
-                       location.pathname === '/signin' || 
-                       location.pathname === '/signup' || 
-                       location.pathname === '/auth/success';
+  const isDashboard = location.pathname.includes('/dashboard') || location.pathname.includes('/admin') || location.pathname.includes('/tenant');
+  const isMySaaS = location.pathname.startsWith('/mysass') || (isSubdomainSite && subdomain === 'mysass');
+  const isTenantSite = location.pathname.match(/^\/[^/]+$/) || location.pathname.match(/^\/[^/]+\/(about|services|testimonials|contact)$/) || isSubdomainSite;
+  
+  // Only show global header/footer for main public pages (not subdomains)
+  const isGlobalSite = !isSubdomainSite && (
+    location.pathname === '/' || 
+    location.pathname === '/about' || 
+    location.pathname === '/services' || 
+    location.pathname === '/contact' || 
+    location.pathname === '/signin' || 
+    location.pathname === '/signup' || 
+    location.pathname === '/auth/success'
+  );
   
   // Initialize heatmap tracking for all pages
   useHeatmapTracking({
@@ -69,6 +93,124 @@ function AppContent() {
       return () => clearTimeout(timer);
     }
   }, [location.pathname, isDashboard, isTenantSite, isMySaaS]);
+
+  // Handle subdomain routing for MySaaS
+  if (isSubdomainSite && subdomain === 'mysass') {
+    return (
+      <div className="App">
+        <Routes>
+          {/* MySaaS Subdomain Routes */}
+          <Route 
+            path="/" 
+            element={
+              <MySaaSLayout>
+                <MySaaSHomePage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/about" 
+            element={
+              <MySaaSLayout>
+                <MySaaSAboutPage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/services" 
+            element={
+              <MySaaSLayout>
+                <MySaaSServicesPage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/products" 
+            element={
+              <MySaaSLayout>
+                <MySaaSProductsPage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/team" 
+            element={
+              <MySaaSLayout>
+                <MySaaSTeamPage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/contact" 
+            element={
+              <MySaaSLayout>
+                <MySaaSContactPage />
+              </MySaaSLayout>
+            } 
+          />
+          <Route 
+            path="/dashboard" 
+            element={<MySaaSDashboardPage />} 
+          />
+          <Route 
+            path="/dashboard/team" 
+            element={<MySaaSTeamManagement />} 
+          />
+          <Route 
+            path="/dashboard/categories" 
+            element={<MySaaSProductCategoriesManagement />} 
+          />
+          <Route 
+            path="/dashboard/products" 
+            element={<MySaaSProductsManagement />} 
+          />
+          <Route 
+            path="/dashboard/clients" 
+            element={<MySaaSClientsManagement />} 
+          />
+          <Route 
+            path="/dashboard/certificates" 
+            element={<MySaaSCertificatesManagement />} 
+          />
+          <Route 
+            path="/dashboard/testimonials" 
+            element={<MySaaSTestimonialsManagement />} 
+          />
+          <Route 
+            path="/dashboard/users" 
+            element={<MySaaSUsersManagement />} 
+          />
+          <Route 
+            path="/dashboard/contacts" 
+            element={<MySaaSContactsManagement />} 
+          />
+          {/* Auth Routes */}
+          <Route path="/signin" element={<SignInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/auth/success" element={<AuthSuccessPage />} />
+        </Routes>
+      </div>
+    );
+  }
+
+  // Handle other tenant subdomains
+  if (isSubdomainSite && subdomain !== 'mysass') {
+    return (
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<TenantHomePage />} />
+          <Route path="/about" element={<TenantPage pageType="about" />} />
+          <Route path="/services" element={<TenantPage pageType="services" />} />
+          <Route path="/testimonials" element={<TenantPage pageType="testimonials" />} />
+          <Route path="/contact" element={<TenantPage pageType="contact" />} />
+          {/* Auth Routes */}
+          <Route path="/signin" element={<SignInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/auth/success" element={<AuthSuccessPage />} />
+        </Routes>
+      </div>
+    );
+  }
 
   return (
     <div className="App">
@@ -110,7 +252,7 @@ function AppContent() {
             } 
           />
 
-          {/* MySaaS Routes */}
+          {/* MySaaS Routes (keep for backward compatibility) */}
           <Route 
             path="/mysass" 
             element={

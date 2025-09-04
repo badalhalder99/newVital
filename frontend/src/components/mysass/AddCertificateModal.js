@@ -110,8 +110,8 @@ const AddCertificateModal = ({ certificate, onClose, onCertificateSaved }) => {
       }
 
       const url = certificate
-        ? `http://localhost:3010/api/certificates/${certificate._id}?tenant=mysass`
-        : 'http://localhost:3010/api/certificates?tenant=mysass';
+        ? `http://localhost:3005/api/certificates/${certificate._id}?tenant=mysass`
+        : 'http://localhost:3005/api/certificates?tenant=mysass';
       
       const method = certificate ? 'PUT' : 'POST';
 

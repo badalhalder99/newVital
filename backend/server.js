@@ -26,7 +26,7 @@ const adminUsersRoutes = require('./routes/admin-users');
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-// Middleware - Allow all localhost ports for development
+// Middleware - Allow all localhost ports and subdomains for development
 app.use(cors({
   origin: [
     'http://localhost:3000', 
@@ -35,11 +35,19 @@ app.use(cors({
     'http://localhost:3003', 
     'http://localhost:3004',
     'http://localhost:3005',
-    'http://localhost:3006'
+    'http://localhost:3006',
+    // Allow subdomains
+    /^http:\/\/([^.]+)\.localhost:3000$/,
+    /^http:\/\/([^.]+)\.localhost:3001$/,
+    /^http:\/\/([^.]+)\.localhost:3002$/,
+    /^http:\/\/([^.]+)\.localhost:3003$/,
+    /^http:\/\/([^.]+)\.localhost:3004$/,
+    /^http:\/\/([^.]+)\.localhost:3005$/,
+    /^http:\/\/([^.]+)\.localhost:3006$/
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'X-Tenant-Subdomain'],
   optionsSuccessStatus: 200
 }));
 

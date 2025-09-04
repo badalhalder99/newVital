@@ -14,7 +14,7 @@ const CertificatesManagement = () => {
   const fetchCertificates = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3010/api/certificates?tenant=mysass');
+      const response = await fetch('http://localhost:3005/api/certificates?tenant=mysass');
       if (!response.ok) {
         throw new Error('Failed to fetch certificates');
       }
@@ -53,7 +53,7 @@ const CertificatesManagement = () => {
       const originalCertificates = [...certificates];
       setCertificates(certificates.filter(certificate => certificate._id !== id));
       
-      const response = await fetch(`http://localhost:3010/api/certificates/${id}?tenant=mysass`, {
+      const response = await fetch(`http://localhost:3005/api/certificates/${id}?tenant=mysass`, {
         method: 'DELETE'
       });
       

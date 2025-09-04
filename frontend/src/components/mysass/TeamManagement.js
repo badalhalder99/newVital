@@ -10,11 +10,27 @@ const TeamManagement = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingMember, setEditingMember] = useState(null);
 
+  // Helper function to determine if we're on a subdomain
+  const getSubdomain = () => {
+    const host = window.location.hostname;
+    if (host.includes('localhost')) {
+      const subdomainMatch = host.match(/^([^.]+)\.localhost$/);
+      return subdomainMatch ? subdomainMatch[1] : null;
+    }
+    const parts = host.split('.');
+    if (parts.length > 2) {
+      return parts[0];
+    }
+    return null;
+  };
+
+  const isSubdomain = getSubdomain() === 'mysass';
+
   // Fetch team members from API
   const fetchTeamMembers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3010/api/team-members?tenant=mysass');
+      const response = await fetch('http://localhost:3005/api/team-members?tenant=mysass');
       if (!response.ok) {
         throw new Error('Failed to fetch team members');
       }
@@ -39,7 +55,7 @@ const TeamManagement = () => {
       const originalTeamMembers = [...teamMembers];
       setTeamMembers(teamMembers.filter(member => member._id !== id));
 
-      const response = await fetch(`http://localhost:3010/api/team-members/${id}?tenant=mysass`, {
+      const response = await fetch(`http://localhost:3005/api/team-members/${id}?tenant=mysass`, {
         method: 'DELETE'
       });
 
@@ -105,7 +121,7 @@ const TeamManagement = () => {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '200px' }}>
           <Link 
-            to="/mysass/dashboard" 
+            to={isSubdomain ? "/dashboard" : "/mysass/dashboard"} 
             style={{
               color: 'var(--mysass-text-secondary)',
               fontSize: '1.25rem',

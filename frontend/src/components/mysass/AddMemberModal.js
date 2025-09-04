@@ -107,8 +107,8 @@ const AddMemberModal = ({ member, onClose, onSave }) => {
       }
 
       const url = member 
-        ? `http://localhost:3010/api/team-members/${member._id}`
-        : 'http://localhost:3010/api/team-members';
+        ? `http://localhost:3005/api/team-members/${member._id}`
+        : 'http://localhost:3005/api/team-members';
       
       const method = member ? 'PUT' : 'POST';
 

@@ -1,6 +1,25 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3010';
+// Helper function to get subdomain
+function getSubdomain() {
+  const host = window.location.hostname;
+  const parts = host.split('.');
+  
+  // For localhost development, check if subdomain exists
+  if (host.includes('localhost')) {
+    const subdomainMatch = host.match(/^([^.]+)\.localhost$/);
+    return subdomainMatch ? subdomainMatch[1] : null;
+  }
+  
+  // For production domains
+  if (parts.length > 2) {
+    return parts[0];
+  }
+  
+  return null;
+}
+
+const API_BASE_URL = 'http://localhost:3005';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -13,6 +32,13 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  
+  // Add tenant identification for subdomain requests
+  const subdomain = getSubdomain();
+  if (subdomain && subdomain !== 'www') {
+    config.headers['X-Tenant-Subdomain'] = subdomain;
+  }
+  
   return config;
 });
 

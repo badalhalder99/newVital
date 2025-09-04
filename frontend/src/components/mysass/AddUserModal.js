@@ -87,8 +87,8 @@ const AddUserModal = ({ user, onClose, onUserSaved }) => {
       }
 
       const url = user
-        ? `http://localhost:3010/api/admin-users/${user._id}?tenant=mysass`
-        : 'http://localhost:3010/api/admin-users?tenant=mysass';
+        ? `http://localhost:3005/api/admin-users/${user._id}?tenant=mysass`
+        : 'http://localhost:3005/api/admin-users?tenant=mysass';
       
       const method = user ? 'PUT' : 'POST';
 

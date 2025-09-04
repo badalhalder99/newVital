@@ -124,8 +124,8 @@ const AddTestimonialModal = ({ testimonial, onClose, onTestimonialSaved }) => {
       }
 
       const url = testimonial
-        ? `http://localhost:3010/api/testimonials/${testimonial._id}?tenant=mysass`
-        : 'http://localhost:3010/api/testimonials?tenant=mysass';
+        ? `http://localhost:3005/api/testimonials/${testimonial._id}?tenant=mysass`
+        : 'http://localhost:3005/api/testimonials?tenant=mysass';
       
       const method = testimonial ? 'PUT' : 'POST';
 

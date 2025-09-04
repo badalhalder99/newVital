@@ -7,9 +7,16 @@ const tenantIdentificationMiddleware = async (req, res, next) => {
 
     const subdomain = extractSubdomain(req);
     const tenantHeader = req.headers['x-tenant-id'];
+    const subdomainHeader = req.headers['x-tenant-subdomain'];
 
+    // Priority order: subdomain from URL, then from header, then tenant ID
     if (subdomain && subdomain !== 'www') {
       tenant = await Tenant.findBySubdomain(subdomain);
+      if (tenant) {
+        tenantId = tenant.id;
+      }
+    } else if (subdomainHeader && subdomainHeader !== 'www') {
+      tenant = await Tenant.findBySubdomain(subdomainHeader);
       if (tenant) {
         tenantId = tenant.id;
       }

@@ -65,8 +65,8 @@ const AddCategoryModal = ({ category, onClose, onSave }) => {
       };
 
       const url = category 
-        ? `http://localhost:3010/api/product-categories/${category._id}?tenant=mysass`
-        : 'http://localhost:3010/api/product-categories?tenant=mysass';
+        ? `http://localhost:3005/api/product-categories/${category._id}?tenant=mysass`
+        : 'http://localhost:3005/api/product-categories?tenant=mysass';
       
       const method = category ? 'PUT' : 'POST';
 

@@ -10,11 +10,27 @@ const ProductCategoriesManagement = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
 
+  // Helper function to determine if we're on a subdomain
+  const getSubdomain = () => {
+    const host = window.location.hostname;
+    if (host.includes('localhost')) {
+      const subdomainMatch = host.match(/^([^.]+)\.localhost$/);
+      return subdomainMatch ? subdomainMatch[1] : null;
+    }
+    const parts = host.split('.');
+    if (parts.length > 2) {
+      return parts[0];
+    }
+    return null;
+  };
+
+  const isSubdomain = getSubdomain() === 'mysass';
+
   // Fetch categories from API
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3010/api/product-categories?tenant=mysass');
+      const response = await fetch('http://localhost:3005/api/product-categories?tenant=mysass');
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
       }
@@ -39,7 +55,7 @@ const ProductCategoriesManagement = () => {
       const originalCategories = [...categories];
       setCategories(categories.filter(category => category._id !== id));
 
-      const response = await fetch(`http://localhost:3010/api/product-categories/${id}?tenant=mysass`, {
+      const response = await fetch(`http://localhost:3005/api/product-categories/${id}?tenant=mysass`, {
         method: 'DELETE'
       });
 
@@ -114,7 +130,7 @@ const ProductCategoriesManagement = () => {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '200px' }}>
           <Link 
-            to="/mysass/dashboard" 
+            to={isSubdomain ? "/dashboard" : "/mysass/dashboard"} 
             style={{
               color: 'var(--mysass-text-secondary)',
               fontSize: '1.25rem',

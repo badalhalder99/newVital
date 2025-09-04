@@ -17,7 +17,30 @@ const MySaaSLayout = ({ children }) => {
 
   const isActive = (path) => location.pathname === path;
 
-  const navItems = [
+  // Helper function to determine if we're on a subdomain
+  const getSubdomain = () => {
+    const host = window.location.hostname;
+    if (host.includes('localhost')) {
+      const subdomainMatch = host.match(/^([^.]+)\.localhost$/);
+      return subdomainMatch ? subdomainMatch[1] : null;
+    }
+    const parts = host.split('.');
+    if (parts.length > 2) {
+      return parts[0];
+    }
+    return null;
+  };
+
+  const isSubdomain = getSubdomain() === 'mysass';
+
+  const navItems = isSubdomain ? [
+    { path: '/', label: 'Home' },
+    { path: '/about', label: 'About Us' },
+    { path: '/services', label: 'Services' },
+    { path: '/products', label: 'Products' },
+    { path: '/team', label: 'Team' },
+    { path: '/contact', label: 'Contact Us' }
+  ] : [
     { path: '/mysass', label: 'Home' },
     { path: '/mysass/about', label: 'About Us' },
     { path: '/mysass/services', label: 'Services' },
@@ -31,7 +54,7 @@ const MySaaSLayout = ({ children }) => {
       {/* Header */}
       <header className="mysass-header">
         <nav className="mysass-nav">
-          <Link to="/mysass" className="mysass-logo">
+          <Link to={isSubdomain ? "/" : "/mysass"} className="mysass-logo">
             Harmony Sourcing
           </Link>
 
@@ -188,13 +211,13 @@ const MySaaSLayout = ({ children }) => {
           <div className="mysass-footer-section">
             <h4>Quick Links</h4>
             <ul className="mysass-footer-links">
-              <li><Link to="/mysass">Home</Link></li>
-              <li><Link to="/mysass/about">About Us</Link></li>
-              <li><Link to="/mysass/services">Services</Link></li>
-              <li><Link to="/mysass/products">Products</Link></li>
-              <li><Link to="/mysass/team">Our Team</Link></li>
-              <li><Link to="/mysass/contact">Contact Us</Link></li>
-              <li><Link to="/mysass/dashboard">Dashboard</Link></li>
+              <li><Link to={isSubdomain ? "/" : "/mysass"}>Home</Link></li>
+              <li><Link to={isSubdomain ? "/about" : "/mysass/about"}>About Us</Link></li>
+              <li><Link to={isSubdomain ? "/services" : "/mysass/services"}>Services</Link></li>
+              <li><Link to={isSubdomain ? "/products" : "/mysass/products"}>Products</Link></li>
+              <li><Link to={isSubdomain ? "/team" : "/mysass/team"}>Our Team</Link></li>
+              <li><Link to={isSubdomain ? "/contact" : "/mysass/contact"}>Contact Us</Link></li>
+              <li><Link to={isSubdomain ? "/dashboard" : "/mysass/dashboard"}>Dashboard</Link></li>
             </ul>
           </div>
 

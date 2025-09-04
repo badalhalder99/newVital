@@ -22,7 +22,8 @@
       "Read(/C:\\Users\\badal\\Desktop\\VITAL - Copy/**)",
       "Read(/C:\\Users\\badal\\Desktop\\VITAL - Copy\\frontend\\src\\pages/**)",
       "Read(/C:\\Users\\badal\\Desktop\\VITAL - Copy\\frontend\\src\\services/**)",
-      "Read(/C:\\Users\\badal\\Desktop\\VITAL - Copy\\frontend/**)"
+      "Read(/C:\\Users\\badal\\Desktop\\VITAL - Copy\\frontend/**)",
+      "Read(/C:\\Users\\badal\\Desktop\\VITAL - Copy/**)"
     ],
     "deny": []
   }

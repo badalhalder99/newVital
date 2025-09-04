@@ -10,7 +10,7 @@ const TeamPage = () => {
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-        const response = await fetch('http://localhost:3010/api/team-members?tenant=mysass');
+        const response = await fetch('http://localhost:3005/api/team-members?tenant=mysass');
         if (response.ok) {
           const data = await response.json();
           setTeamMembers(data);

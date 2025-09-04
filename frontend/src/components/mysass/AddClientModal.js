@@ -110,8 +110,8 @@ const AddClientModal = ({ client, onClose, onClientSaved }) => {
       }
 
       const url = client
-        ? `http://localhost:3010/api/clients/${client._id}?tenant=mysass`
-        : 'http://localhost:3010/api/clients?tenant=mysass';
+        ? `http://localhost:3005/api/clients/${client._id}?tenant=mysass`
+        : 'http://localhost:3005/api/clients?tenant=mysass';
       
       const method = client ? 'PUT' : 'POST';
 

@@ -4,12 +4,47 @@ import { Menu, X } from 'lucide-react';
 
 const TenantHeader = ({ tenantData, settings }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { tenantName } = useParams();
+  const { tenantName: urlTenantName } = useParams();
+
+  // Helper function to get tenant name from subdomain or URL params
+  const getTenantName = () => {
+    const host = window.location.hostname;
+    if (host.includes('localhost')) {
+      const subdomainMatch = host.match(/^([^.]+)\.localhost$/);
+      if (subdomainMatch && subdomainMatch[1] !== 'www') {
+        return subdomainMatch[1];
+      }
+    } else {
+      const parts = host.split('.');
+      if (parts.length > 2 && parts[0] !== 'www') {
+        return parts[0];
+      }
+    }
+    return urlTenantName;
+  };
+
+  const tenantName = getTenantName();
+  
+  // Check if we're on a subdomain
+  const isSubdomain = () => {
+    const host = window.location.hostname;
+    if (host.includes('localhost')) {
+      return host.match(/^([^.]+)\.localhost$/) !== null;
+    }
+    return host.split('.').length > 2;
+  };
 
   const siteName = settings?.site_name || tenantData?.name || 'Your Business';
   const primaryColor = settings?.primary_color || '#10b981';
 
-  const navigation = [
+  // Build navigation URLs based on subdomain vs path-based routing
+  const navigation = isSubdomain() ? [
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Services', href: '/services' },
+    { name: 'Testimonials', href: '/testimonials' },
+    { name: 'Contact', href: '/contact' }
+  ] : [
     { name: 'Home', href: `/${tenantName}` },
     { name: 'About', href: `/${tenantName}/about` },
     { name: 'Services', href: `/${tenantName}/services` },
@@ -23,7 +58,7 @@ const TenantHeader = ({ tenantData, settings }) => {
         <div className="flex justify-between items-center py-4">
           {/* Logo/Brand */}
           <div className="flex items-center">
-            <Link to={`/${tenantName}`} className="tenant-brand">
+            <Link to={isSubdomain() ? '/' : `/${tenantName}`} className="tenant-brand">
               {settings?.logo_url ? (
                 <img
                   src={settings.logo_url}

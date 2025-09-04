@@ -10,11 +10,27 @@ const ProductsManagement = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
+  // Helper function to determine if we're on a subdomain
+  const getSubdomain = () => {
+    const host = window.location.hostname;
+    if (host.includes('localhost')) {
+      const subdomainMatch = host.match(/^([^.]+)\.localhost$/);
+      return subdomainMatch ? subdomainMatch[1] : null;
+    }
+    const parts = host.split('.');
+    if (parts.length > 2) {
+      return parts[0];
+    }
+    return null;
+  };
+
+  const isSubdomain = getSubdomain() === 'mysass';
+
   // Fetch products from API
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3010/api/products?tenant=mysass');
+      const response = await fetch('http://localhost:3005/api/products?tenant=mysass');
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }
@@ -39,7 +55,7 @@ const ProductsManagement = () => {
       const originalProducts = [...products];
       setProducts(products.filter(product => product._id !== id));
 
-      const response = await fetch(`http://localhost:3010/api/products/${id}?tenant=mysass`, {
+      const response = await fetch(`http://localhost:3005/api/products/${id}?tenant=mysass`, {
         method: 'DELETE'
       });
 
@@ -114,7 +130,7 @@ const ProductsManagement = () => {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '200px' }}>
           <Link 
-            to="/mysass/dashboard" 
+            to={isSubdomain ? "/dashboard" : "/mysass/dashboard"} 
             className="back-button"
             style={{
               color: 'var(--mysass-text-secondary)',

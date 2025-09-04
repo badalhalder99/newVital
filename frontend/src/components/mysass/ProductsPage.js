@@ -13,7 +13,7 @@ const ProductsPage = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:3010/api/product-categories?tenant=mysass');
+        const response = await fetch('http://localhost:3005/api/product-categories?tenant=mysass');
         if (response.ok) {
           const categories = await response.json();
           setProductCategories(categories);
@@ -112,7 +112,7 @@ const ProductsPage = () => {
   // Fetch products from database
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:3010/api/products?tenant=mysass');
+      const response = await fetch('http://localhost:3005/api/products?tenant=mysass');
       if (response.ok) {
         const productsData = await response.json();
         setProducts(productsData.filter(product => product.status === 'Active'));

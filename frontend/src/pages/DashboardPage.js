@@ -101,11 +101,9 @@ const DashboardPage = () => {
         </div>
       );
     } else if (user?.role === 'tenant') {
-      // Generate live site URL based on domain name
+      // Generate live site URL based on domain name using subdomain format
       const subdomain = user?.domainName ? user.domainName.replace(/\s+/g, '').toLowerCase() : null;
-      const liveSiteUrl = subdomain === 'mysass' ? 
-        'http://localhost:3000/mysass' : 
-        subdomain ? `http://localhost:3000/${subdomain}` : null;
+      const liveSiteUrl = subdomain ? `http://${subdomain}.localhost:3001` : null;
         
       return (
         <div className="dashboard-overview">

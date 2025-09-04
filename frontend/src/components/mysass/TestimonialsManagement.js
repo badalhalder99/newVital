@@ -14,7 +14,7 @@ const TestimonialsManagement = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3010/api/testimonials?tenant=mysass');
+      const response = await fetch('http://localhost:3005/api/testimonials?tenant=mysass');
       if (!response.ok) {
         throw new Error('Failed to fetch testimonials');
       }
@@ -53,7 +53,7 @@ const TestimonialsManagement = () => {
       const originalTestimonials = [...testimonials];
       setTestimonials(testimonials.filter(testimonial => testimonial._id !== id));
       
-      const response = await fetch(`http://localhost:3010/api/testimonials/${id}?tenant=mysass`, {
+      const response = await fetch(`http://localhost:3005/api/testimonials/${id}?tenant=mysass`, {
         method: 'DELETE'
       });
       

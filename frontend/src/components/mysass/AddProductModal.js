@@ -41,7 +41,7 @@ const AddProductModal = ({ product, onClose, onSave }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:3010/api/product-categories?tenant=mysass');
+        const response = await fetch('http://localhost:3005/api/product-categories?tenant=mysass');
         if (response.ok) {
           const data = await response.json();
           setCategories(data);
@@ -108,8 +108,8 @@ const AddProductModal = ({ product, onClose, onSave }) => {
       });
 
       const url = product 
-        ? `http://localhost:3010/api/products/${product._id}?tenant=mysass`
-        : 'http://localhost:3010/api/products?tenant=mysass';
+        ? `http://localhost:3005/api/products/${product._id}?tenant=mysass`
+        : 'http://localhost:3005/api/products?tenant=mysass';
       
       const method = product ? 'PUT' : 'POST';
 

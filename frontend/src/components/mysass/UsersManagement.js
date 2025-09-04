@@ -14,7 +14,7 @@ const UsersManagement = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3010/api/admin-users?tenant=mysass');
+      const response = await fetch('http://localhost:3005/api/admin-users?tenant=mysass');
       if (!response.ok) {
         throw new Error('Failed to fetch users');
       }
@@ -53,7 +53,7 @@ const UsersManagement = () => {
       const originalUsers = [...users];
       setUsers(users.filter(user => user._id !== id));
       
-      const response = await fetch(`http://localhost:3010/api/admin-users/${id}?tenant=mysass`, {
+      const response = await fetch(`http://localhost:3005/api/admin-users/${id}?tenant=mysass`, {
         method: 'DELETE'
       });
       

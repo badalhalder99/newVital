@@ -22,12 +22,28 @@ const DashboardPage = () => {
     });
   }, []);
 
+  // Helper function to determine if we're on a subdomain
+  const getSubdomain = () => {
+    const host = window.location.hostname;
+    if (host.includes('localhost')) {
+      const subdomainMatch = host.match(/^([^.]+)\.localhost$/);
+      return subdomainMatch ? subdomainMatch[1] : null;
+    }
+    const parts = host.split('.');
+    if (parts.length > 2) {
+      return parts[0];
+    }
+    return null;
+  };
+
+  const isSubdomain = getSubdomain() === 'mysass';
+
   const handleLogout = () => {
     // Implement logout logic
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    // Redirect to MySaaS home page instead of global signin
-    navigate('/mysass');
+    // Redirect to MySaaS home page
+    navigate(isSubdomain ? '/' : '/mysass');
   };
 
   const managementCards = [
@@ -36,56 +52,56 @@ const DashboardPage = () => {
       description: 'Manage team members, their roles, and information.',
       buttonText: 'Manage Team',
       buttonColor: 'var(--mysass-accent-blue)',
-      link: '/mysass/dashboard/team'
+      link: isSubdomain ? '/dashboard/team' : '/mysass/dashboard/team'
     },
     {
       title: 'Product Categories',
       description: 'Manage product categories and classifications.',
       buttonText: 'Manage Categories',
       buttonColor: 'var(--mysass-primary)',
-      link: '/mysass/dashboard/categories'
+      link: isSubdomain ? '/dashboard/categories' : '/mysass/dashboard/categories'
     },
     {
       title: 'Product Management',
       description: 'Add, edit, or remove products from the portfolio.',
       buttonText: 'Manage Products',
       buttonColor: 'var(--mysass-accent-purple)',
-      link: '/mysass/dashboard/products'
+      link: isSubdomain ? '/dashboard/products' : '/mysass/dashboard/products'
     },
     {
       title: 'Client Management',
       description: 'Manage client information and logos.',
       buttonText: 'Manage Clients',
       buttonColor: 'var(--mysass-accent-orange)',
-      link: '/mysass/dashboard/clients'
+      link: isSubdomain ? '/dashboard/clients' : '/mysass/dashboard/clients'
     },
     {
       title: 'Certificate Management',
       description: 'Manage certificates and accreditations.',
       buttonText: 'Manage Certificates',
       buttonColor: 'var(--mysass-accent-red)',
-      link: '/mysass/dashboard/certificates'
+      link: isSubdomain ? '/dashboard/certificates' : '/mysass/dashboard/certificates'
     },
     {
       title: 'Contact Management',
       description: 'View and manage contact form submissions.',
       buttonText: 'Manage Contacts',
       buttonColor: 'var(--mysass-accent-cyan)',
-      link: '/mysass/dashboard/contacts'
+      link: isSubdomain ? '/dashboard/contacts' : '/mysass/dashboard/contacts'
     },
     {
       title: 'Testimonial Management',
       description: 'Add, edit, and manage client testimonials.',
       buttonText: 'Manage Testimonials',
       buttonColor: 'var(--mysass-accent-purple)',
-      link: '/mysass/dashboard/testimonials'
+      link: isSubdomain ? '/dashboard/testimonials' : '/mysass/dashboard/testimonials'
     },
     {
       title: 'User Management',
       description: 'Manage admin users and permissions.',
       buttonText: 'Manage Users',
       buttonColor: 'var(--mysass-text-muted)',
-      link: '/mysass/dashboard/users'
+      link: isSubdomain ? '/dashboard/users' : '/mysass/dashboard/users'
     }
   ];
 
