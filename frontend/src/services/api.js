@@ -19,7 +19,7 @@ function getSubdomain() {
   return null;
 }
 
-const API_BASE_URL = 'http://localhost:3005';
+const API_BASE_URL = 'http://localhost:3002';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

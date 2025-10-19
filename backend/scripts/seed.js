@@ -8,7 +8,7 @@ const Subscription = require('../models/Subscription');
 async function seedDatabase() {
   try {
     console.log('🌱 Starting database seeding...');
-    
+
     // Connect to MongoDB
     await connectToMongoDB();
     console.log('✅ Connected to MongoDB');
@@ -59,20 +59,20 @@ async function seedDatabase() {
     // Seed subscriptions for tenants
     console.log('💳 Seeding subscriptions...');
     const plans = Subscription.getDefaultPlans();
-    
+
     for (let i = 0; i < createdTenants.length; i++) {
       const tenant = createdTenants[i];
       const tenantId = i + 1; // Use simple numeric ID (1, 2, 3)
       const planType = i === 0 ? 'premium' : i === 1 ? 'basic' : 'free';
       const planDetails = plans[planType];
-      
+
       const subscription = new Subscription({
         tenant_id: tenantId,
         ...planDetails,
         billing_cycle: 'monthly',
         current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
       });
-      
+
       await subscription.save();
       console.log(`  ✅ Created ${planType} subscription for tenant: ${tenant.name}`);
     }
@@ -90,7 +90,7 @@ async function seedDatabase() {
         email_verified: true
       },
       {
-        tenant_id: 1, // Default tenant  
+        tenant_id: 1, // Default tenant
         name: 'Demo Tenant',
         email: 'tenant@demo.com',
         password: await User.hashPassword('tenant123'),
@@ -140,7 +140,7 @@ async function seedDatabase() {
     console.log(`  - Tenants: ${tenants.length}`);
     console.log(`  - Subscriptions: ${createdTenants.length}`);
     console.log(`  - Users: ${users.length}`);
-    
+
     console.log('\n🔐 Default login credentials:');
     console.log('  Admin: admin@example.com / admin123');
     console.log('  Tenant: tenant@demo.com / tenant123');
@@ -155,17 +155,17 @@ async function seedDatabase() {
 async function clearDatabase() {
   try {
     console.log('🧹 Clearing existing data...');
-    
+
     await connectToMongoDB();
     const { getMongoDb } = require('../config/database');
     const db = getMongoDb();
-    
+
     // Clear collections
     await db.collection('users').deleteMany({});
     await db.collection('tenants').deleteMany({});
     await db.collection('subscriptions').deleteMany({});
     await db.collection('analytics').deleteMany({});
-    
+
     console.log('✅ Database cleared');
   } catch (error) {
     console.error('❌ Error clearing database:', error);
@@ -177,12 +177,12 @@ async function clearDatabase() {
 async function main() {
   const args = process.argv.slice(2);
   const shouldClear = args.includes('--clear') || args.includes('-c');
-  
+
   try {
     if (shouldClear) {
       await clearDatabase();
     }
-    
+
     await seedDatabase();
   } catch (error) {
     console.error('❌ Seeding failed:', error);
